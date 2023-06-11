@@ -6,45 +6,32 @@
 #include <unistd.h>
 #include <time.h>
 
-void menuPrincipal();
-void menuPacientes();
-void menuLaboratorios();
-void menuPracticas();
-void imprimircabecera(char cabecera[]);
-void altaPaciente(FILE *archivo);
-void modificar(FILE *archivo);
-///LABS ALEATORIOS
-void mostrar_laboratorios(FILE *archivo);
-void laboratoriosAleatorios(FILE *archiLab);
-
-
-
 typedef struct
 {
-    int idPaciente; /// campo ˙nico y autoincremental
+    int idPaciente; /// campo √∫nico y autoincremental
     char nombre[30];
     char apellido[30];
     char dni[10];
     char movil[12];
-    int eliminado; /// 0 si est· activo - 1 si est· eliminado
+    int eliminado; /// 0 si est√° activo - 1 si est√° eliminado
 } stPaciente;
 typedef struct
 {
-    int idLab; /// campo ˙nico y autoincremental
+    int idLab; /// campo √∫nico y autoincremental
     int idPaciente;
     int anio;
     int mes; /// 1 a 12
-    int dia; /// 1 a Ö dependiendo del mes
-    int PracticaRealizada; /// con cÛdigos entre 1 y 10.
-    int baja; /// 0 si est· activo - 1 si est· eliminado
+    int dia; /// 1 a ‚Ä¶ dependiendo del mes
+    int PracticaRealizada; /// con c√≥digos entre 1 y 10.
+    int baja; /// 0 si est√° activo - 1 si est√° eliminado
 } stLaboratorios;
 
 typedef struct
 {
-    int idPractica; /// campo ˙nico y autoincremental
+    int idPractica; /// campo √∫nico y autoincremental
     char nombre[30];
-    int costo; /// valores enteros entre 1000 y 10000 como mÌnimos y m·ximos respectivamente
-    int baja; /// 0 si est· activo - 1 si est· eliminado
+    int costo; /// valores enteros entre 1000 y 10000 como m√≠nimos y m√°ximos respectivamente
+    int baja; /// 0 si est√° activo - 1 si est√° eliminado
 } stPracticas;
 
 typedef struct
@@ -54,16 +41,41 @@ typedef struct
     int anio;
 } stFecha;
 
+///--------MENUS------------
+void menuPrincipal();
+void menuPacientes();
+void menuLaboratorios();
+void menuPracticas();
+void imprimircabecera(char cabecera[]);
+///--------------------------
+
+///---------CRUD-----------
+void altaPaciente(FILE *archivo);
+void modificar(FILE *archivo);
+void mostrarPacientes(FILE *archivo);
+///--------------------------------------
+
+///---------LABS ALEATORIOS------------------
+void mostrar_laboratorios(FILE *archivo);
+void laboratoriosAleatorios(FILE *archiLab);
+///-------------------------------------
+
+///------VALIDACIONES--------------
+stPaciente  validaciones(FILE *archivo,stPaciente paciente);
 
 int main()
 {
     system("COLOR B");
-      FILE *bin=NULL;
-/// alta_paciente(bin);
+    FILE *bin=NULL;
+
+    altaPaciente(bin);
 ///menuPrincipal();
-laboratoriosAleatorios(bin);
-mostrar_archivo(bin);
-fclose(bin);
+   // laboratoriosAleatorios(bin);
+   // mostrar_laboratorios(bin);
+    mostrarPacientes(bin);
+ modificar(bin);
+   mostrarPacientes(bin);
+    fclose(bin);
     return 0;
 }
 
@@ -295,6 +307,7 @@ void altaPaciente(FILE *archivo)
 
 
     stPaciente paciente;
+    stPaciente pacienteV;
     archivo = fopen("ARCH", "a+b" );
     if ( archivo != NULL)
     {
@@ -305,17 +318,21 @@ void altaPaciente(FILE *archivo)
             fflush(stdin);
             gets(paciente.nombre);
             printf("Ingrese apellido \n");
+            fflush(stdin);
             gets(paciente.apellido);
             printf("Ingrese DNI\n");
             fflush(stdin);
             gets(paciente.dni);
             printf("Ingrese movil \n");
+            fflush(stdin);
             gets(paciente.movil);
+    ///Posible lugar donde iria la validacion
 
-            paciente.eliminado=0;
-
-
-            fwrite (&paciente, sizeof (stPaciente), 1, archivo);
+           strcpy(pacienteV.movil,paciente.movil);
+            pacienteV.eliminado=paciente.eliminado;
+            pacienteV.idPaciente=paciente.idPaciente;
+           pacienteV= validaciones(archivo,paciente);
+            fwrite (&pacienteV, sizeof (stPaciente), 1, archivo);
 
             printf ( "Presione ESC para terminar \n" );
         }
@@ -357,7 +374,7 @@ void modificar(FILE *archivo)
             gets(paciente.movil);
 
             paciente.eliminado=0;
-
+            validaciones(archivo,paciente);
             fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
 
             fwrite(&paciente,sizeof(stPaciente),1,archivo);
@@ -373,14 +390,11 @@ void modificar(FILE *archivo)
 
 /**
 Alta de Laboratorios aleatorios anteriores a la fecha
-actual. La funciÛn deber· agregar 100, eligiendo de
-manera aleatoria el paciente, la fecha (del aÒo actual)
+actual. La funci√≥n deber√° agregar 100, eligiendo de
+manera aleatoria el paciente, la fecha (del a√±o actual)
 y la practica realizada (entre 1 y 10).Pueden haber
-m·s de 1 laboratorio para el mismo paciente en la
+m√°s de 1 laboratorio para el mismo paciente en la
 misma fecha.
-ValidaciÛn en el ingreso de los Datos: dni del paciente
-(que no se repita) y nombre de la pr·ctica de
-laboratorio (que no se repita).
 */
 
 void laboratoriosAleatorios(FILE *archiLab)
@@ -401,7 +415,7 @@ void laboratoriosAleatorios(FILE *archiLab)
     // Convertimos el tiempo a una estructura de tm
     info_tiempo = localtime(&tiempo_actual);
 
-    // Obtenemos el dÌa del mes como cadena
+    // Obtenemos el d√≠a del mes como cadena
     strftime(dia, sizeof(dia), "%d", info_tiempo);
     strftime(mes, sizeof(mes),"%m",info_tiempo);
     strftime(anio, sizeof(anio),"%Y",info_tiempo);
@@ -411,116 +425,123 @@ void laboratoriosAleatorios(FILE *archiLab)
     mesActual = atoi(mes);
     anioActual =atoi(anio);
 
-if(archiLab!= NULL){
-//srand(time(NULL));
-do{
-
-    fecha.anio=rand()%(anioActual-2018 +1)+2018;
-
-    if(fecha.anio ==anioActual)
+    if(archiLab!= NULL)
     {
-        fecha.mes = rand()%(mesActual-1)+1;
-        if(fecha.mes == mesActual)
-        {
-            switch (fecha.mes)
-            {
-            case 2:
-                // Verificar si el aÒo es bisiesto para febrero
-                if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
-                    diasMaximos = 29;
-                else
-                    diasMaximos = 28;
-                break;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                diasMaximos = 30;
-                break;
-            default:
-                diasMaximos = 31;
-                break;
-            }
-
-            fecha.dia = 1 + rand() % diaActual;
-        }
-        else
+//srand(time(NULL));
+        do
         {
 
+            fecha.anio=rand()%(anioActual-2018 +1)+2018;
 
-            switch (fecha.mes)
+            if(fecha.anio ==anioActual)
             {
-            case 2:
-                // Verificar si el aÒo es bisiesto para febrero
-                if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
-                    diasMaximos = 29;
+                fecha.mes = rand()%(mesActual-1)+1;
+                if(fecha.mes == mesActual)
+                {
+                    switch (fecha.mes)
+                    {
+                    case 2:
+                        // Verificar si el a√±o es bisiesto para febrero
+                        if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
+                            diasMaximos = 29;
+                        else
+                            diasMaximos = 28;
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        diasMaximos = 30;
+                        break;
+                    default:
+                        diasMaximos = 31;
+                        break;
+                    }
+
+                    fecha.dia = 1 + rand() % diaActual;
+                }
                 else
-                    diasMaximos = 28;
-                break;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                diasMaximos = 30;
-                break;
-            default:
-                diasMaximos = 31;
-                break;
+                {
+
+
+                    switch (fecha.mes)
+                    {
+                    case 2:
+                        // Verificar si el a√±o es bisiesto para febrero
+                        if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
+                            diasMaximos = 29;
+                        else
+                            diasMaximos = 28;
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        diasMaximos = 30;
+                        break;
+                    default:
+                        diasMaximos = 31;
+                        break;
+                    }
+
+                    fecha.dia = 1 + rand() % diasMaximos;
+
+
+                }
+
+
+            }
+            else
+            {
+                fecha.mes = rand()%(12-1)+1;
+                switch (fecha.mes)
+                {
+                case 2:
+                    // Verificar si el a√±o es bisiesto para febrero
+                    if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
+                        diasMaximos = 29;
+                    else
+                        diasMaximos = 28;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    diasMaximos = 30;
+                    break;
+                default:
+                    diasMaximos = 31;
+                    break;
+                }
+
+                fecha.dia = 1 + rand() % diasMaximos;
+
+
             }
 
-            fecha.dia = 1 + rand() % diasMaximos;
 
+
+
+            // idLab ///CAMPO AUTOINCREMENTAL VER
+            laboratorio.idPaciente=  rand()%10 +1; ///VER SI HAY QUE TRAER LOS PACIENTES ACTUALES O SE EJECUTA CON 10 PACIENTES POR DEFAULT
+
+            laboratorio.anio = fecha.anio;
+            laboratorio.mes =fecha.mes;
+            laboratorio.dia= fecha.dia;
+            laboratorio.PracticaRealizada= 1+ rand() % 10;
+            laboratorio.baja =0;
+
+            i++;
 
         }
-
+        while(i<101 && fwrite(&laboratorio,sizeof(laboratorio),1,archiLab)>0);
 
     }
-else{
-    fecha.mes = rand()%(12-1)+1;
-      switch (fecha.mes)
-            {
-            case 2:
-                // Verificar si el aÒo es bisiesto para febrero
-                if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
-                    diasMaximos = 29;
-                else
-                    diasMaximos = 28;
-                break;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                diasMaximos = 30;
-                break;
-            default:
-                diasMaximos = 31;
-                break;
-            }
-
-            fecha.dia = 1 + rand() % diasMaximos;
-
-
-}
-
-
-   // idLab ///CAMPO AUTOINCREMENTAL VER
-laboratorio.idPaciente=  rand() %10 +1; ///VER SI HAY QUE TRAER LOS PACIENTES ACTUALES O SE EJECUTA CON 10 PACIENTES POR DEFAULT
-
-laboratorio.anio = fecha.anio;
-    laboratorio.mes =fecha.mes;
-    laboratorio.dia= fecha.dia;
-    laboratorio.PracticaRealizada= 1+ rand() % 10;
-    laboratorio.baja =0;
-
-i++;
-
-}while(i<101 && fwrite(&laboratorio,sizeof(laboratorio),1,archiLab)>0);
-
-}
-else{
-    printf("ERROR AL ABRIR O CREAR EL ARCHIVO \n");
-}
-fclose(archiLab);
+    else
+    {
+        printf("ERROR AL ABRIR O CREAR EL ARCHIVO \n");
+    }
+    fclose(archiLab);
 }
 
 void mostrar_laboratorios(FILE *archivo)
@@ -543,6 +564,7 @@ void mostrar_laboratorios(FILE *archivo)
                 printf("PACIENTE: %d \n",laboratorio.idPaciente);
                 printf("DIA MES ANIO: %d/%d/%d \n",laboratorio.dia,laboratorio.mes,laboratorio.anio);
                 printf("ACTIVO 0 si 1 no: %d \n",laboratorio.baja);
+                printf("PRACTICAS %d \n",laboratorio.PracticaRealizada);
                 printf(" CANTIDAD: %d \n",j);
                 printf("-----------------\n");
                 j++;
@@ -553,3 +575,72 @@ void mostrar_laboratorios(FILE *archivo)
         fclose(archivo);
     }
 }
+
+
+
+/**
+Validaci√≥n en el ingreso de los Datos: dni del paciente
+(que no se repita) y nombre de la pr√°ctica de
+laboratorio (que no se repita).
+*/
+///VER VALIDACIONES PARA MODIFICAR Y LAS VALIDACIONES DE LABORATORIO
+
+stPaciente validaciones(FILE *archivo,stPaciente paciente)
+{
+  stPaciente pacienteValido;
+  /**  pacienteValido.idPaciente=paciente.idPaciente;
+    pacienteValido.movil=paciente.movil;
+    pacienteValido.eliminado=paciente.eliminado;  */
+
+    archivo=fopen("ARCH","r+b");
+while(fread(&pacienteValido,sizeof(stPaciente),1,archivo)>0)
+    {
+        while(strcmpi(pacienteValido.nombre,paciente.nombre)==0 && strcmpi(pacienteValido.apellido,paciente.apellido)==0)
+        {
+            printf("El nombre y apellido ya existe, ingrese otro nombre y apellido \n");
+
+            printf("Ingrese nombre nuevo \n");
+            fflush(stdin);
+            gets(paciente.nombre);
+            printf("Ingrese Apellido nuevo \n");
+            fflush(stdin);
+            gets(paciente.apellido);
+        }
+    }
+      rewind(archivo);
+
+    while(fread(&pacienteValido,sizeof(stPaciente),1,archivo)>0)
+    {
+///dni,nombre,apellido vienen como parametros de la funcion alta y modificacion
+
+        while(strcmpi(paciente.dni,pacienteValido.dni)==0)
+        {
+
+            printf("El dni ya existe, ingrese otro DNI \n");
+            printf("Ingrese DNI nuevo \n");
+            gets(paciente.dni);
+
+        }
+    }
+    fclose(archivo);
+
+    return paciente;
+    }
+
+void mostrarPacientes(FILE *archivo){
+archivo=fopen("ARCH","r+b");
+stPaciente paciente;
+while(fread(&paciente,sizeof(stPaciente),1,archivo)>0){
+
+
+    printf("NOMBRE: %s \n",paciente.nombre);
+    printf("APELLIDO  %s\n",paciente.apellido);
+    printf("DNI %s\n",paciente.dni);
+    printf("movil %s\n",paciente.movil);
+
+printf("----------------------------\n");
+}
+
+fclose(archivo);
+}
+

@@ -31,11 +31,30 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="laboratorios.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="laboratorios.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="menus.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menus.h" />
+		<Unit filename="pacientes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pacientes.h" />
+		<Unit filename="practicas.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="practicas.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
+			<code_completion />
+			<envvars />
+			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

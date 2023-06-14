@@ -33,10 +33,10 @@
 	<unistd.h>
 	<time.h>
 
-1686730997 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.c
+1686779341 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.c
 	"practicas.h"
 
-1686732018 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.h
+1686778793 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.h
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
@@ -63,7 +63,7 @@
 	<unistd.h>
 	<time.h>
 
-1686733438 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\menus.c
+1686778930 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\menus.c
 	"menus.h"
 	"practicas.h"
 	"pacientes.h"

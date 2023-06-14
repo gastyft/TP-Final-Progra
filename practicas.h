@@ -18,8 +18,14 @@ typedef struct
 
 
 stPracticas cargaUnaPractica();
+stPracticas cargaUnaPractica();
 
+  stPracticas busquedaPractica (char nombreArchivo[]);
 
+void cargaArchivoPracticas(char nombreArchivo[]);
+void muestraUnaPractica(stPracticas practica);
+void muestraArchivoPracticas(char nombreArchivo[]);
+void darBajaPracticas(char nombreArchivo[]);
 
 
 #endif // PRACTICAS_H_INCLUDED

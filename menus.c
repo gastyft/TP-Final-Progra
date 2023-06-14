@@ -150,7 +150,7 @@ void menuLaboratorios()
             ///Alta
             break;
         case '2':
-            ///Baja
+            darBajaLaboratorios("laboratorios.dat");
             break;
         case '3':
             ///Modificacion
@@ -202,20 +202,25 @@ void menuPracticas()
         switch(opcion)
         {
         case '1':
-        //    cargaArchivoPracticas("practicas.dat");
+       cargaArchivoPracticas("practicas.dat");
+
             system("cls");
             break;
         case '2':
-            ///Baja
+           darBajaPracticas("practicas.dat");
+            printf("Baja exitosa \n");
+            system("pause");
             break;
         case '3':
             ///Modificacion
             break;
         case '4':
-            ///Consulta
+           busquedaPractica("practicas.dat");
+           system("pause");
+           system("cls");
             break;
         case '5':
-        //     muestraArchivoPracticas("practicas.dat");
+          muestraArchivoPracticas("practicas.dat");
              system("pause");
              system("cls");
             break;;

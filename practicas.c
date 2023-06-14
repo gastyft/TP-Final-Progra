@@ -78,15 +78,18 @@ void muestraArchivoPracticas(char nombreArchivo[])
 }
 
 
-stPracticas busquedaPractica (FILE *archivo)
+stPracticas busquedaPractica (char nombreArchivo[])
 {
+    int flag=0;
     char nombreAuxiliar[30];
     stPracticas practicas;
-    archivo=fopen("practicas.dat","r+b");
+   FILE*  archivo=fopen(nombreArchivo,"r+b");
+   if(archivo){
     printf("Ingrese nombre de practica a buscar \n");
     fflush(stdin);
 
     gets(nombreAuxiliar);
+    system("cls");
      while(fread(&practicas,sizeof(stPracticas),1,archivo)>0)
         {
             if (strcmpi(practicas.nombre,nombreAuxiliar)==0)
@@ -103,16 +106,18 @@ stPracticas busquedaPractica (FILE *archivo)
                 fseek(archivo,(-1)*sizeof(stPracticas),SEEK_CUR);
                 fread(&practicas,sizeof(stPracticas),1,archivo);
                 printf("NOMBRE: %s \n",practicas.nombre);
-                printf("APELLIDO  %d \n",practicas.costo);
+                printf("COSTO  %d \n",practicas.costo);
+                flag=1;
 
-
-            }
-            else
-            {
-                printf("La practica que ingreso no se encuentra en el sistema, intentelo nuevamente \n");
-                break;
             }
         }
+        if(!flag){
+            printf("No existe la practica buscada\n");
+        }
+   }
+   else{
+    printf("ERROR AL ABRIR ARCHIVO\n");
+   }
 
     fclose(archivo);
     return practicas;

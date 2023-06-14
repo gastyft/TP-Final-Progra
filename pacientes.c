@@ -1,11 +1,5 @@
 #include "pacientes.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <string.h>
-#include <unistd.h>
-#include <time.h>
-#define ESC 27
+
 
 stPaciente cargaUnPaciente()
 {

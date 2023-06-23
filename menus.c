@@ -10,7 +10,7 @@ void muestraTituloMenu(char titulo[])
 
     printf("%s", titulo);
 
-    printf("\n");
+
     replicaChar('*', 50);
 }
 
@@ -33,7 +33,7 @@ void menuPrincipal()
         printf("\n 1) Pacientes");
         printf("\n 2) Laboratorio");
         printf("\n 3) Practicas");
-        printf("\n\n ESC para salir\n\n");
+        printf("\n\n ESC para salir\n");
 
         replicaChar('*', 50);
 
@@ -80,7 +80,7 @@ void menuPacientes()
         printf("\n 3)Modificacion");
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
-        printf("\n\nESC para volver al menu principal\n\n");
+        printf("\n\nESC para volver al menu principal\n");
 
         replicaChar('*', 50);
 
@@ -96,6 +96,9 @@ void menuPacientes()
             break;
         case '2':
             darBajaPacientes("pacientes.dat");
+            system("pause");
+            system("cls");
+
             break;
         case '3':
             ///modificar();
@@ -106,6 +109,8 @@ void menuPacientes()
             break;
         case '5':
             muestraArchivoPacientes("pacientes.dat");
+            printf(" \n");
+            printf(" ");
             system("pause");
             system("cls");
             break;
@@ -129,14 +134,14 @@ void menuLaboratorios()
     char opcion=0;
     do
     {
-        muestraTituloMenu("\n\t\tLABORAORIO\n");
+        muestraTituloMenu("\n\t\tLABORATORIO\n");
         printf("\n Seleccione una opcion:\n");
         printf("\n 1)Alta");
         printf("\n 2)Baja");
         printf("\n 3)Modificacion");
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
-        printf("\n\nESC para volver al menu principal\n\n");
+        printf("\n\nESC para volver al menu principal\n");
 
         replicaChar('*', 50);
 
@@ -159,7 +164,7 @@ void menuLaboratorios()
             ///Consulta
             break;
         case '5':
-            laboratoriosAleatorios("laboratorios.dat");
+           /// laboratoriosAleatorios("laboratorios.dat");
             muestraLaboratorio("laboratorios.dat");
             system("pause");
             system("cls");
@@ -191,7 +196,7 @@ void menuPracticas()
         printf("\n 3)Modificacion");
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
-        printf("\n\nESC para volver al menu principal\n\n");
+        printf("\n\nESC para volver al menu principal\n");
 
         replicaChar('*', 50);
 
@@ -208,8 +213,9 @@ void menuPracticas()
             break;
         case '2':
            darBajaPracticas("practicas.dat");
-            printf("Baja exitosa \n");
+
             system("pause");
+            system("cls");
             break;
         case '3':
             ///Modificacion

@@ -30,5 +30,5 @@ typedef struct
 void darBajaLaboratorios(char nombreArchivo[]);
 void muestraLaboratorio (char nombreArchivo[]);
 void laboratoriosAleatorios(char nombreArchivo[]);
-
+stLaboratorios validacionesLabs(char nombreArchivo[],stLaboratorios lab);
 #endif // LABORATORIOS_H_INCLUDED

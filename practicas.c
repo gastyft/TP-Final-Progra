@@ -1,6 +1,6 @@
 #include "practicas.h"
-///FUNCION CARGA UNA PRACTICA
-stPracticas cargaUnaPractica()
+
+stPracticas cargaUnaPractica() ///FUNCION CARGA UNA PRACTICA
 {
     stPracticas practica;
 
@@ -17,14 +17,11 @@ stPracticas cargaUnaPractica()
     return practica;
 }
 
-
-
-///FUNCION CARGA UN ARCHIVO DE PRACTICAS
-void cargaArchivoPracticas(char nombreArchivo[])
+void cargaArchivoPracticas(char nombreArchivo[]) ///FUNCION CARGA UN ARCHIVO DE PRACTICAS
 {
     stPracticas practicas;
     char opcion=0;
-    int cant=0;
+    int cant=0,cantInac;
     FILE *archi = fopen(nombreArchivo, "a+b");
     if(archi!= NULL)
     {
@@ -33,33 +30,55 @@ void cargaArchivoPracticas(char nombreArchivo[])
         do
         {
             cant+=1;
-            practicas = cargaUnaPractica();
-            practicas.idPractica=cant;
-            fwrite(&practicas, sizeof(stPracticas), 1, archi);
-            printf("\nESC para salir o cualquier tecla para continuar");
+            rewind(archi);
+            while(fread(&practicas,sizeof(stPracticas),1,archi))
+            {
+                if(practicas.baja!=0)
+                {
+                    cantInac++;
+                }
+
+            }
+            if(cantInac>10)
+            {
+                printf("No se pueden agregar mas practicas \n");
+                printf("Debe dar de baja alguna \n");
+
+
+            }
+            else
+            {
+                practicas = cargaUnaPractica();
+                practicas.idPractica=cant;
+                practicas= validacionesPractica(nombreArchivo,practicas);
+                fwrite(&practicas, sizeof(stPracticas), 1, archi);
+            }
+            printf("\nESC para salir o cualquier tecla para continuar\n");
             opcion = getch();
         }
         while(opcion != ESC);
         fclose(archi);
     }
-    else{
+    else
+    {
         printf("ERROR EN EL ARCHIVO \n");
     }
 }
 
-///FUNCION MUESTRA UNA PRACTICA:
-void muestraUnaPractica(stPracticas practica)
+void muestraUnaPractica(stPracticas practica) ///FUNCION MUESTRA UNA PRACTICA:
 {
     printf("\n ID: %d", practica.idPractica);
     printf("\n Nombre: %s", practica.nombre);
     printf("\n Costo %d", practica.costo);
-    if(practica.baja ==0){
-        printf("\nPRACTICA ACTIVA\n");
+    if(practica.baja ==0)
+    {
+        printf("\n PRACTICA ACTIVA\n");
     }
-    else{
-        printf("\nPRACTICA INACTIVA\n");
+    else
+    {
+        printf("\n PRACTICA INACTIVA\n");
     }
-    printf("\n =====================================\n");
+    printf(" ==========================\n");
 }
 
 ///MUESTRA ARCHIVO PRACTICAS:
@@ -77,20 +96,20 @@ void muestraArchivoPracticas(char nombreArchivo[])
     }
 }
 
-
-stPracticas busquedaPractica (char nombreArchivo[])
+stPracticas busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NOMBRE
 {
     int flag=0;
     char nombreAuxiliar[30];
     stPracticas practicas;
-   FILE*  archivo=fopen(nombreArchivo,"r+b");
-   if(archivo){
-    printf("Ingrese nombre de practica a buscar \n");
-    fflush(stdin);
+    FILE*  archivo=fopen(nombreArchivo,"r+b");
+    if(archivo)
+    {
+        printf("Ingrese nombre de practica a buscar \n");
+        fflush(stdin);
+        gets(nombreAuxiliar);
 
-    gets(nombreAuxiliar);
-    system("cls");
-     while(fread(&practicas,sizeof(stPracticas),1,archivo)>0)
+        system("cls");
+        while(fread(&practicas,sizeof(stPracticas),1,archivo)>0)
         {
             if (strcmpi(practicas.nombre,nombreAuxiliar)==0)
             {
@@ -105,54 +124,63 @@ stPracticas busquedaPractica (char nombreArchivo[])
                 }
                 fseek(archivo,(-1)*sizeof(stPracticas),SEEK_CUR);
                 fread(&practicas,sizeof(stPracticas),1,archivo);
+                printf("ID Practica: %d \n",practicas.idPractica);
                 printf("NOMBRE: %s \n",practicas.nombre);
                 printf("COSTO  %d \n",practicas.costo);
                 flag=1;
 
             }
         }
-        if(!flag){
+        if(!flag)
+        {
             printf("No existe la practica buscada\n");
         }
-   }
-   else{
-    printf("ERROR AL ABRIR ARCHIVO\n");
-   }
+    }
+    else
+    {
+        printf("ERROR AL ABRIR ARCHIVO\n");
+    }
 
     fclose(archivo);
     return practicas;
 }
 
-
-
-void darBajaPracticas(char nombreArchivo[])
-
+void darBajaPracticas(char nombreArchivo[])   ///FUNCION DAR BAJA PRACTICAS
 {
     FILE *archivo=fopen(nombreArchivo,"r+b");
     stPracticas practicas;
-
+    int flag=1;
     char nombre[30];
     if(archivo != NULL)
     {
-    printf("Ingrese dni \n");
-    fflush(stdin);
-    gets(nombre);
+        printf("Ingrese Practica \n");
+        fflush(stdin);
+        gets(nombre);
 
 
-     while(fread(&practicas,sizeof(stPracticas),1,archivo)){
-            if(strcmpi(practicas.nombre, nombre)==0){
-
-           }
-       }
-                fseek(archivo,(-1)*sizeof(stPracticas),SEEK_CUR);
-
-        practicas.baja=-1;
-
-
-
-
-        fwrite(&practicas,sizeof(stPracticas),1,archivo);
-
+        while(flag && fread(&practicas,sizeof(stPracticas),1,archivo))
+        {
+            if(strcmpi(practicas.nombre, nombre)==0)
+            {
+                if(practicas.baja == -1)
+                {
+                    printf("Ya esta dada de baja la practica %s \n",practicas.nombre);
+                    flag=0;
+                }
+                else
+                {
+                    fseek(archivo,(-1)*sizeof(stPracticas),SEEK_CUR);
+                    practicas.baja=-1;
+                    fwrite(&practicas,sizeof(stPracticas),1,archivo);
+                    flag=0;
+                    printf("Baja exitosa \n");
+                }
+            }
+        }
+        if(flag)
+        {
+            printf("No se encontro practica con ese nombre. Intente nuevamente \n");
+        }
     }
     else
     {
@@ -160,5 +188,56 @@ void darBajaPracticas(char nombreArchivo[])
     }
     fclose(archivo);
 }
+
+stPracticas validacionesPractica(char nombreArchivo[],stPracticas practica) ///VALIDACIONES PRACTICA PARA QUE NO SE REPITAN DATOS
+{
+
+    stPracticas practicaValido;
+
+    FILE *archivo=fopen(nombreArchivo,"r+b");
+    rewind(archivo);
+
+    while( fread(&practicaValido,sizeof(stPracticas),1,archivo)>0 )
+    {
+        if(strcmpi(practica.nombre,practicaValido.nombre)==0)
+        {
+
+            printf("La practica ya existe, ingrese una nueva practica\n");
+            printf("Ingrese nombre de practica nueva \n");
+            fflush(stdin);
+            gets(practica.nombre);
+            rewind(archivo);
+        }
+    }
+
+    fclose(archivo);
+
+    return practica;
+}
+/*
+void validacionesPracticaId(char nombreArchivo[])
+{
+
+stPracticas practica;
+   FILE * archivo= fopen(nombreArchivo, "r+b");
+    int cant=0,cantInac;
+   if(archivo!= NULL){
+
+    fseek(archivo,0,SEEK_END);
+
+   }
+   else{
+    printf("ERROR AL ABRIR ARCHIVO \n");
+   }
+
+
+fclose(archivo);
+
+}
+*/
+
+
+
+
 
 

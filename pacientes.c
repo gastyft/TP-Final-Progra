@@ -31,17 +31,18 @@ stPaciente cargaUnPaciente()
 void muestraUnPaciente(stPaciente paciente)
 {
     if(paciente.eliminado==0){
-        printf("\nPACIENTE ACTIVO ");
+        printf("\n PACIENTE ACTIVO ");
     }
     else{
-        printf("\nPACIENTE INACTIVO ");
+        printf("\n PACIENTE INACTIVO ");
     }
     printf("\n ID: %d", paciente.idPaciente);
     printf("\n Nombre: %s", paciente.nombre);
     printf("\n Apellido: %s", paciente.apellido);
     printf("\n DNI: %s", paciente.dni);
     printf("\n Telefono: %s", paciente.movil);
-    printf("\n =====================================\n");
+    printf("\n =====================================");
+
 }
 
 
@@ -52,6 +53,7 @@ void cargaArchivoPacientes(char nombreArchivo[])
     stPaciente paciente;
     char opcion=0;
      int cant=0;
+     int flag=1;
     FILE *archi = fopen(nombreArchivo, "ab");
     if(archi)
     {
@@ -62,8 +64,17 @@ void cargaArchivoPacientes(char nombreArchivo[])
             cant++;
             paciente = cargaUnPaciente();
             paciente.idPaciente=cant;
-            fwrite(&paciente, sizeof(stPaciente), 1, archi);
-            printf("\nESC para salir o cualquier tecla para continuar");
+
+            paciente= validaciones(nombreArchivo,paciente,&flag);
+            paciente.eliminado=0;
+            if (flag==0){
+                printf("No se cargara el paciente.\n");
+            }
+            else{
+                 fwrite(&paciente, sizeof(stPaciente), 1, archi);
+            }
+
+            printf("\nESC para salir o cualquier tecla para continuar con una nueva carga");
             opcion = getch();
         }
         while(opcion != ESC);
@@ -71,8 +82,8 @@ void cargaArchivoPacientes(char nombreArchivo[])
     }
 }
 
-///MUESTRA ARCHIVO PACIENTES:
-void muestraArchivoPacientes(char nombreArchivo[])
+
+void muestraArchivoPacientes(char nombreArchivo[]) ///MUESTRA ARCHIVO PACIENTES
 {
     stPaciente paciente;
     FILE *archi = fopen(nombreArchivo, "rb");
@@ -88,11 +99,11 @@ void muestraArchivoPacientes(char nombreArchivo[])
 
 
 
-void darBajaPacientes(char nombreArchivo[])
+void darBajaPacientes(char nombreArchivo[]) ///DAR DE BAJA PACIENTES
 {
     FILE *archivo=fopen(nombreArchivo,"r+b");
     stPaciente paciente;
-
+    int flag=1;
     char dni[30];
     if(archivo != NULL)
     {
@@ -101,19 +112,32 @@ void darBajaPacientes(char nombreArchivo[])
     gets(dni);
 
 
-     while(fread(&paciente,sizeof(stPaciente),1,archivo)){
+     while(flag && fread(&paciente,sizeof(stPaciente),1,archivo)){
             if(strcmpi(paciente.dni, dni)==0){
+        if(paciente.eliminado == -1)
+                {
+            printf("Ya esta dado de baja el DNI %s \n",paciente.dni);
+                flag=0;
+                }
+                else
+                {
 
-           }
-       }
-                fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
-
-        paciente.eliminado=-1;
 
 
+                     fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
+                    paciente.eliminado=-1;
+                    fwrite(&paciente,sizeof(stPaciente),1,archivo);
+                    flag=0;
+                    printf("Baja exitosa \n");
+                }
+            }
+        }
+        if(flag)
+        {
+            printf("No se encontro practica con ese nombre. Intente nuevamente \n");
 
 
-        fwrite(&paciente,sizeof(stPaciente),1,archivo);
+        }
 
     }
     else
@@ -123,7 +147,7 @@ void darBajaPacientes(char nombreArchivo[])
     fclose(archivo);
 }
 
-void opcionBuscaPacienteDNI (char nombreArchivo[])
+void opcionBuscaPacienteDNI (char nombreArchivo[]) ///BUSCAR PACIENTE DNI
 {
     char dniABuscar[30];
 
@@ -155,7 +179,7 @@ void opcionBuscaPacienteDNI (char nombreArchivo[])
 }
 
 
-stPaciente buscarPacientePorDNI (char nombreArchivo[], char dni[])
+stPaciente buscarPacientePorDNI (char nombreArchivo[], char dni[])  /// BUSCAR PACIENTE POR DNI
 {
     int flag=0;
     //  char o=0;
@@ -184,7 +208,7 @@ FILE*    archivo=fopen(nombreArchivo,"r+b");
 
 
 
-stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[])
+stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]) /// BUSCAR PACIENTE POR APELLIDO
 {
     int flag=0;
     //  char o=0;
@@ -212,7 +236,7 @@ fclose(archivo);
     return paciente;
 }
 
-void opcion_busca_paciente_apellido (char nombreArchivo[])
+void opcion_busca_paciente_apellido (char nombreArchivo[]) ///BUSCA PACIENTE POR APELLIDO
 {
     char apellidoABuscar[30];
 
@@ -255,25 +279,42 @@ laboratorio (que no se repita).
 */
 ///VER VALIDACIONES PARA MODIFICAR Y LAS VALIDACIONES DE LABORATORIO
 
-stPaciente validaciones(char nombreArchivo[],stPaciente paciente)
+stPaciente validaciones(char nombreArchivo[],stPaciente paciente,int *flag) /// VALIDACIONES DE PACIENTE POR DNI
 {
+///dni,nombre,apellido vienen como parametros de la funcion alta y modificacion
     stPaciente pacienteValido;
-    /**  pacienteValido.idPaciente=paciente.idPaciente;
-      pacienteValido.movil=paciente.movil;
-      pacienteValido.eliminado=paciente.eliminado;  */
+char o=0;
 
    FILE *archivo=fopen(nombreArchivo,"r+b");
     rewind(archivo);
 
-    while(fread(&pacienteValido,sizeof(stPaciente),1,archivo)>0 && strcmpi(paciente.dni,pacienteValido.dni)==0)
+    while( *flag && fread(&pacienteValido,sizeof(stPaciente),1,archivo)>0 )
     {
-///dni,nombre,apellido vienen como parametros de la funcion alta y modificacion
-            printf("El dni ya existe, ingrese otro DNI \n");
-            printf("Ingrese DNI nuevo \n");
+
+        if(strcmpi(paciente.dni,pacienteValido.dni)==0){
+
+
+            printf("El dni ya existe,presione cualquier tecla para cargar un nuevo DNI o ESCAPE para salir\n");
+
+            fflush(stdin);
+            o=getch();
+            if(o==ESC){
+                *flag=0;
+
+            }
+            else{
+                    system("cls");
+            printf("Ingrese nuevo DNI\n");
+            fflush(stdin);
             gets(paciente.dni);
+            rewind(archivo);
 
+            }
+         system("cls");
+            }
+        }
+ system("cls");
 
-    }
     fclose(archivo);
 
     return paciente;
@@ -281,7 +322,7 @@ stPaciente validaciones(char nombreArchivo[],stPaciente paciente)
 
 
 
-stPaciente busquedaPaciente (char nombreArchivo[])
+stPaciente busquedaPaciente (char nombreArchivo[]) ///SUB MENU DE BUSQUEDA POR DNI O APELLIDO
 {
  char o=0;
     stPaciente paciente;
@@ -298,11 +339,13 @@ stPaciente busquedaPaciente (char nombreArchivo[])
         {
         case '1':
    opcionBuscaPacienteDNI(nombreArchivo);
+            printf("\n");
             system("pause");
             system("cls");
             break;
         case '2':
             opcion_busca_paciente_apellido(nombreArchivo);
+            printf("\n");
             system("pause");
             system("cls");
             break;

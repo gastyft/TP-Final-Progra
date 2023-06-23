@@ -8,6 +8,8 @@
 #include <time.h>
 #define ESC 27
 
+
+///ESTRUCTURA
 typedef struct
 {
     int idPaciente;
@@ -20,7 +22,7 @@ typedef struct
 
 
 
-
+///PROTOTIPADO
 void muestraUnPaciente(stPaciente paciente);
 void cargaArchivoPacientes(char nombreArchivo[]);
 void muestraArchivoPacientes(char nombreArchivo[]);
@@ -31,6 +33,5 @@ stPaciente cargaUnPaciente();
 stPaciente buscarPacientePorDNI (char nombreArchivo[], char dni[]);
 stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]);
 stPaciente busquedaPaciente(char nombreArchivo[]);
-
-
+stPaciente validaciones(char nombreArchivo[],stPaciente paciente,int *flag);
 #endif // PACIENTES_H_INCLUDED

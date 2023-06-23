@@ -18,7 +18,7 @@
 
 int main()
 {
-    system("COLOR B");
+        system("COLOR B");
         menuPrincipal();
         return 0;
 }

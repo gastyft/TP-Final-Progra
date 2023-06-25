@@ -22,9 +22,10 @@ void muestraUnaPractica(stPracticas practica);
 void muestraArchivoPracticas(char nombreArchivo[]);
 void darBajaPracticas(char nombreArchivo[]);
 void validacionesPracticaId(char nombreArchivo[]);
+void busquedaPractica (char nombreArchivo[]);
+stPracticas validacionCosto(stPracticas valPracticas);
 stPracticas validacionesPractica(char nombreArchivo[],stPracticas practica);
 stPracticas cargaUnaPractica();
-stPracticas cargaUnaPractica();
-stPracticas busquedaPractica (char nombreArchivo[]);
+
 
 #endif // PRACTICAS_H_INCLUDED

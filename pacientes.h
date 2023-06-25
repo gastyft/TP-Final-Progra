@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <time.h>
 #define ESC 27
-
+#include "practicas.h"
+#include "laboratorios.h"
 
 ///ESTRUCTURA
 typedef struct
@@ -29,6 +30,8 @@ void muestraArchivoPacientes(char nombreArchivo[]);
 void opcionBuscaPacienteDNI (char nombreArchivo[]);
 void darBajaPacientes(char nombreArchivo[]);
 void opcion_busca_paciente_apellido (char nombreArchivo[]);
+void practicaPaciente(stPaciente paciente);
+int costoTotal(stPaciente paciente);
 stPaciente cargaUnPaciente();
 stPaciente buscarPacientePorDNI (char nombreArchivo[], char dni[]);
 stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]);

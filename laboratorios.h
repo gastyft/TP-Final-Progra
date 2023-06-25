@@ -8,6 +8,8 @@
 #include <unistd.h>
 #include <time.h>
 #define ESC 27
+#include "practicas.h"
+#include "pacientes.h"
 
 typedef struct
 {
@@ -27,8 +29,12 @@ typedef struct
     int anio;
 } stFecha;
 
+void validacionesLabs(char nombreArchivo[]);
 void darBajaLaboratorios(char nombreArchivo[]);
-void muestraLaboratorio (char nombreArchivo[]);
 void laboratoriosAleatorios(char nombreArchivo[]);
-stLaboratorios validacionesLabs(char nombreArchivo[],stLaboratorios lab);
+void muestraUnLaboratorio(stLaboratorios laboratorio);
+void muestraArchivoLaboratorios(char nombreArchivo[]);
+void cargaArchivoLaboratorios(char nombreArchivo[]);
+void busquedaLaboratorio (char nombreArchivo[]);
+stLaboratorios cargaUnLaboratorio();
 #endif // LABORATORIOS_H_INCLUDED

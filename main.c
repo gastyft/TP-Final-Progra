@@ -10,20 +10,10 @@
 #include"practicas.h"
 #include "pacientes.h"
 #include"menus.h"
-
-
-
-
-
+#include "Firma.h"
 
 int main()
 {
-        system("COLOR B");
-        menuPrincipal();
-        return 0;
+    menuPrincipal();
+    return 0;
 }
-
-
-
-
-

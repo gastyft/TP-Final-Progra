@@ -4,7 +4,7 @@
 	<stdlib.h>
 	<conio.h>
 
-1687481066 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\main.c
+1687673596 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\main.c
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
@@ -15,41 +15,25 @@
 	"practicas.h"
 	"pacientes.h"
 	"menus.h"
+	"Firma.h"
 
-1687500840 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\pacientes.h
+1687668439 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\pacientes.h
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
 	<string.h>
 	<unistd.h>
 	<time.h>
-
-1687502615 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\pacientes.c
-	"pacientes.h"
-
-1687502961 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.c
 	"practicas.h"
-
-1687502994 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.h
-	<stdio.h>
-	<stdlib.h>
-	<conio.h>
-	<string.h>
-	<unistd.h>
-	<time.h>
-
-1687478624 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\laboratorios.h
-	<stdio.h>
-	<stdlib.h>
-	<conio.h>
-	<string.h>
-	<unistd.h>
-	<time.h>
-
-1687502440 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\laboratorios.c
 	"laboratorios.h"
 
-1686732330 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\menus.h
+1687673382 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\pacientes.c
+	"pacientes.h"
+
+1687673433 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.c
+	"practicas.h"
+
+1687666491 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\practicas.h
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
@@ -57,9 +41,37 @@
 	<unistd.h>
 	<time.h>
 
-1687503231 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\menus.c
+1687671721 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\laboratorios.h
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<string.h>
+	<unistd.h>
+	<time.h>
+	"practicas.h"
+	"pacientes.h"
+
+1687673314 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\laboratorios.c
+	"laboratorios.h"
+
+1687666141 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\menus.h
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<string.h>
+	<unistd.h>
+	<time.h>
+
+1687673537 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\menus.c
 	"menus.h"
 	"practicas.h"
 	"pacientes.h"
 	"laboratorios.h"
+
+1687673554 source:c:\users\gasty\onedrive\escritorio\tp-final-progra-main\firma.c
+	<stdio.h>
+	<stdlib.h>
+	"Firma.h"
+
+1683788451 c:\users\gasty\onedrive\escritorio\tp-final-progra-main\firma.h
 

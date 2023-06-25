@@ -30,10 +30,13 @@ stPaciente cargaUnPaciente()
 ///FUNCION MUESTRA UN PACIENTE:
 void muestraUnPaciente(stPaciente paciente)
 {
-    if(paciente.eliminado==0){
+
+    if(paciente.eliminado==0)
+    {
         printf("\n PACIENTE ACTIVO ");
     }
-    else{
+    else
+    {
         printf("\n PACIENTE INACTIVO ");
     }
     printf("\n ID: %d", paciente.idPaciente);
@@ -41,19 +44,57 @@ void muestraUnPaciente(stPaciente paciente)
     printf("\n Apellido: %s", paciente.apellido);
     printf("\n DNI: %s", paciente.dni);
     printf("\n Telefono: %s", paciente.movil);
+    printf("\n Practica/s: ");
+    practicaPaciente(paciente);
+    printf("\n Costo total de las practicas realizadas: $%d",costoTotal(paciente));
     printf("\n =====================================");
-
 }
 
+void practicaPaciente(stPaciente paciente)
+{
+    FILE *archivo= fopen("practicas.dat","r+b");
+    FILE *archivoLab= fopen("laboratorios.dat","r+b");
+    stPracticas practica;
+    stLaboratorios laboratorios;
+    if(archivo != NULL)
+    {
+
+        while(fread(&laboratorios,sizeof(stLaboratorios),1,archivoLab)>0)  ///Reccorre archivo de labs buscando id del paciente con las practicas
+        {
+            if(paciente.idPaciente == laboratorios.idPaciente)
+            {
+                rewind(archivo);
+                while(fread(&practica,sizeof(stPracticas),1,archivo)>0)
+                {
+                    if(laboratorios.PracticaRealizada== practica.idPractica)
+                    {
+
+                        printf("%s ",practica.nombre);
+                    }
 
 
+
+                }
+
+            }
+        }
+    }
+    else
+    {
+        printf("ERROR AL ABRIR EL ARCHIVO \n");
+    }
+
+    fclose(archivo);
+    fclose(archivoLab);
+
+}
 ///FUNCION CARGA UN ARCHIVO DE PACIENTES
 void cargaArchivoPacientes(char nombreArchivo[])
 {
     stPaciente paciente;
     char opcion=0;
-     int cant=0;
-     int flag=1;
+    int cant=0;
+    int flag=1;
     FILE *archi = fopen(nombreArchivo, "ab");
     if(archi)
     {
@@ -67,11 +108,13 @@ void cargaArchivoPacientes(char nombreArchivo[])
 
             paciente= validaciones(nombreArchivo,paciente,&flag);
             paciente.eliminado=0;
-            if (flag==0){
+            if (flag==0)
+            {
                 printf("No se cargara el paciente.\n");
             }
-            else{
-                 fwrite(&paciente, sizeof(stPaciente), 1, archi);
+            else
+            {
+                fwrite(&paciente, sizeof(stPaciente), 1, archi);
             }
 
             printf("\nESC para salir o cualquier tecla para continuar con una nueva carga");
@@ -107,24 +150,26 @@ void darBajaPacientes(char nombreArchivo[]) ///DAR DE BAJA PACIENTES
     char dni[30];
     if(archivo != NULL)
     {
-    printf("Ingrese dni \n");
-    fflush(stdin);
-    gets(dni);
+        printf("Ingrese dni \n");
+        fflush(stdin);
+        gets(dni);
 
 
-     while(flag && fread(&paciente,sizeof(stPaciente),1,archivo)){
-            if(strcmpi(paciente.dni, dni)==0){
-        if(paciente.eliminado == -1)
+        while(flag && fread(&paciente,sizeof(stPaciente),1,archivo))
+        {
+            if(strcmpi(paciente.dni, dni)==0)
+            {
+                if(paciente.eliminado == -1)
                 {
-            printf("Ya esta dado de baja el DNI %s \n",paciente.dni);
-                flag=0;
+                    printf("Ya esta dado de baja el DNI %s \n",paciente.dni);
+                    flag=0;
                 }
                 else
                 {
 
 
 
-                     fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
+                    fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
                     paciente.eliminado=-1;
                     fwrite(&paciente,sizeof(stPaciente),1,archivo);
                     flag=0;
@@ -151,31 +196,31 @@ void opcionBuscaPacienteDNI (char nombreArchivo[]) ///BUSCAR PACIENTE DNI
 {
     char dniABuscar[30];
 
-   FILE * archivo= fopen(nombreArchivo, "rb");
+    FILE * archivo= fopen(nombreArchivo, "rb");
     if (archivo!=NULL)
-        {
+    {
         printf("Ingrese el DNI a buscar: ");
         fflush(stdin);
         gets(dniABuscar);
- system("cls");
+        system("cls");
         stPaciente paciente = buscarPacientePorDNI(nombreArchivo,dniABuscar);
 
         if (atoi(paciente.dni) != -1)
-            {
+        {
             fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
             muestraUnPaciente(paciente);
-            }
+        }
         else
-            {
-            printf(" El paciente con el DNI %s NO EXISTE \n", dniABuscar);
-            }
-
-        }
-    else
         {
-        printf("FALLO AL ABRIR EL ARCHIVO\n");
+            printf(" El paciente con el DNI %s NO EXISTE \n", dniABuscar);
         }
-        fclose(archivo);
+
+    }
+    else
+    {
+        printf("FALLO AL ABRIR EL ARCHIVO\n");
+    }
+    fclose(archivo);
 }
 
 
@@ -184,7 +229,7 @@ stPaciente buscarPacientePorDNI (char nombreArchivo[], char dni[])  /// BUSCAR P
     int flag=0;
     //  char o=0;
     stPaciente paciente;
-FILE*    archivo=fopen(nombreArchivo,"r+b");
+    FILE*    archivo=fopen(nombreArchivo,"r+b");
     if(archivo!=NULL)
     {
         while(flag==0 && fread(&paciente,sizeof(stPaciente),1,archivo)>0  )
@@ -193,25 +238,19 @@ FILE*    archivo=fopen(nombreArchivo,"r+b");
             {
                 flag=1;
             }
-
         }
-
     }
-
     if (!flag)
-        {
+    {
         strcpy(paciente.dni, "-1");
-        }
-
+    }
     return paciente;
 }
-
-
 
 stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]) /// BUSCAR PACIENTE POR APELLIDO
 {
     int flag=0;
-    //  char o=0;
+
     stPaciente paciente;
     FILE *archivo=fopen(nombreArchivo,"r+b");
     if(archivo!=NULL)
@@ -222,17 +261,13 @@ stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]) ///
             {
                 flag=1;
             }
-
         }
-
-
     }
-
     if (!flag)
-        {
+    {
         strcpy(paciente.apellido, "-1");
-        }
-fclose(archivo);
+    }
+    fclose(archivo);
     return paciente;
 }
 
@@ -242,35 +277,28 @@ void opcion_busca_paciente_apellido (char nombreArchivo[]) ///BUSCA PACIENTE POR
 
     FILE *archivo= fopen(nombreArchivo, "rb");
     if (archivo!=NULL)
-        {
+    {
         printf("Ingrese el apellido a buscar: ");
         fflush(stdin);
-
         gets(apellidoABuscar);
- system("cls");
+        system("cls");
         stPaciente paciente = buscarPacientePorApellido(nombreArchivo,apellidoABuscar);
-
         if (atoi(paciente.apellido) != -1)
-            {
-
+        {
             fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
             muestraUnPaciente(paciente);
-            }
+        }
         else
-            {
-            printf("El paciente con el apellido %s NO EXISTE \n", apellidoABuscar);
-            }
-        fclose(archivo);
-        }
-    else
         {
-        printf("FALLO AL ABRIR EL ARCHIVO");
+            printf("El paciente con el apellido %s NO EXISTE \n", apellidoABuscar);
         }
+        fclose(archivo);
+    }
+    else
+    {
+        printf("FALLO AL ABRIR EL ARCHIVO");
+    }
 }
-
-
-
-
 
 /**
 Validación en el ingreso de los Datos: dni del paciente
@@ -283,40 +311,33 @@ stPaciente validaciones(char nombreArchivo[],stPaciente paciente,int *flag) /// 
 {
 ///dni,nombre,apellido vienen como parametros de la funcion alta y modificacion
     stPaciente pacienteValido;
-char o=0;
-
-   FILE *archivo=fopen(nombreArchivo,"r+b");
+    char o=0;
+    FILE *archivo=fopen(nombreArchivo,"r+b");
     rewind(archivo);
-
     while( *flag && fread(&pacienteValido,sizeof(stPaciente),1,archivo)>0 )
     {
-
-        if(strcmpi(paciente.dni,pacienteValido.dni)==0){
-
-
+        if(strcmpi(paciente.dni,pacienteValido.dni)==0)
+        {
             printf("El dni ya existe,presione cualquier tecla para cargar un nuevo DNI o ESCAPE para salir\n");
-
             fflush(stdin);
             o=getch();
-            if(o==ESC){
+            if(o==ESC)
+            {
                 *flag=0;
-
             }
-            else{
-                    system("cls");
-            printf("Ingrese nuevo DNI\n");
-            fflush(stdin);
-            gets(paciente.dni);
-            rewind(archivo);
-
+            else
+            {
+                system("cls");
+                printf("Ingrese nuevo DNI\n");
+                fflush(stdin);
+                gets(paciente.dni);
+                rewind(archivo);
             }
-         system("cls");
-            }
+            system("cls");
         }
- system("cls");
-
+    }
+    system("cls");
     fclose(archivo);
-
     return paciente;
 }
 
@@ -324,7 +345,7 @@ char o=0;
 
 stPaciente busquedaPaciente (char nombreArchivo[]) ///SUB MENU DE BUSQUEDA POR DNI O APELLIDO
 {
- char o=0;
+    char o=0;
     stPaciente paciente;
     while(o!=ESC)
     {
@@ -334,11 +355,10 @@ stPaciente busquedaPaciente (char nombreArchivo[]) ///SUB MENU DE BUSQUEDA POR D
         fflush(stdin);
         o=getch();
         system("cls");
-
         switch(o)
         {
         case '1':
-   opcionBuscaPacienteDNI(nombreArchivo);
+            opcionBuscaPacienteDNI(nombreArchivo);
             printf("\n");
             system("pause");
             system("cls");
@@ -350,13 +370,42 @@ stPaciente busquedaPaciente (char nombreArchivo[]) ///SUB MENU DE BUSQUEDA POR D
             system("cls");
             break;
         case 27:
-
             break;
         }
     }
     return paciente;
 }
 
-
-
+int costoTotal(stPaciente paciente)
+{
+    FILE*archivo= fopen("practicas.dat","r+b");
+    FILE *archivoLab=fopen("laboratorios.dat","r+b");
+    stPracticas practica;
+    stLaboratorios laboratorios;
+    int costo=0;
+    if(archivo !=NULL && archivoLab!=NULL)
+    {
+        while(fread(&laboratorios,sizeof(stLaboratorios),1,archivoLab)>0)  ///Reccorre archivo de labs buscando id del paciente con las practicas
+        {
+            if(paciente.idPaciente == laboratorios.idPaciente)
+            {
+                rewind(archivo);
+                while(fread(&practica,sizeof(stPracticas),1,archivo)>0)
+                {
+                    if(laboratorios.PracticaRealizada== practica.idPractica)
+                    {
+                        costo+=practica.costo;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        printf("ERROR AL ABRIR EL ARCHIVO\n");
+    }
+    fclose(archivo);
+    fclose(archivoLab);
+    return costo;
+}
 

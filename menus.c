@@ -7,10 +7,7 @@ void muestraTituloMenu(char titulo[])
 {
     printf("\n");
     replicaChar('*', 50);
-
     printf("%s", titulo);
-
-
     replicaChar('*', 50);
 }
 
@@ -21,11 +18,12 @@ void replicaChar(char c, int cant)
         printf("%c", c);
     }
 }
-
-///FUNCION PARA MENU PRINCIPAL:
-void menuPrincipal()
+void menuPrincipal() ///FUNCION PARA MENU PRINCIPAL
 {
     char opcion=0;
+    system("COLOR B");
+   // printf("Abriendo APP, espere");
+   // carga_puntos();
     do
     {
         muestraTituloMenu("\n\t\tMENU PRINCIPAL\n");
@@ -34,13 +32,10 @@ void menuPrincipal()
         printf("\n 2) Laboratorio");
         printf("\n 3) Practicas");
         printf("\n\n ESC para salir\n");
-
         replicaChar('*', 50);
-
         fflush(stdin);
         opcion=getch();
         system("cls");
-
         switch(opcion)
         {
         case '1':
@@ -53,9 +48,11 @@ void menuPrincipal()
             menuPracticas();
             break;
         case 27:
-            printf("CODIGO FINALIZADO\n");
+      //     printf("Cerrando APP. Gracias por confiar en nosotros");
+       //     carga_puntos();
+       //     system("cls");
+       //   firma();
             break;
-
         default:
             printf("\n\tHa seleccionado una opcion invalida.\n\tPor favor, presione cualquier tecla para continuar\n\n");
             fflush(stdin);
@@ -65,10 +62,9 @@ void menuPrincipal()
         }
     }
     while(opcion != ESC);
-
 }
-///FUNCION MENU PACIENTES:
-void menuPacientes()
+
+void menuPacientes()///FUNCION MENU PACIENTES
 {
     char opcion=0;
     do
@@ -81,13 +77,10 @@ void menuPacientes()
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
         printf("\n\nESC para volver al menu principal\n");
-
         replicaChar('*', 50);
-
         fflush(stdin);
         opcion=getch();
         system("cls");
-
         switch(opcion)
         {
         case '1':
@@ -98,14 +91,12 @@ void menuPacientes()
             darBajaPacientes("pacientes.dat");
             system("pause");
             system("cls");
-
             break;
         case '3':
             ///modificar();
             break;
         case '4':
-
-          busquedaPaciente("pacientes.dat");
+            busquedaPaciente("pacientes.dat");
             break;
         case '5':
             muestraArchivoPacientes("pacientes.dat");
@@ -116,7 +107,6 @@ void menuPacientes()
             break;
         case 27:
             break;
-
         default:
             printf("\n\tHa seleccionado una opcion invalida.\n\tPor favor, presione cualquier tecla para continuar\n\n");
             fflush(stdin);
@@ -127,9 +117,7 @@ void menuPacientes()
     }
     while(opcion != ESC);
 }
-
-///MENU LABORATORIO:
-void menuLaboratorios()
+void menuLaboratorios() ///MENU LABORATORIO:
 {
     char opcion=0;
     do
@@ -142,17 +130,15 @@ void menuLaboratorios()
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
         printf("\n\nESC para volver al menu principal\n");
-
         replicaChar('*', 50);
-
         fflush(stdin);
         opcion=getch();
         system("cls");
-
         switch(opcion)
         {
         case '1':
-            ///Alta
+            cargaArchivoLaboratorios("laboratorios.dat");
+            system("cls");
             break;
         case '2':
             darBajaLaboratorios("laboratorios.dat");
@@ -161,17 +147,21 @@ void menuLaboratorios()
             ///Modificacion
             break;
         case '4':
-            ///Consulta
+            busquedaLaboratorio ("laboratorios.dat");
+            printf("\n");
+            system("pause");
+                system("cls");
             break;
         case '5':
-           /// laboratoriosAleatorios("laboratorios.dat");
-            muestraLaboratorio("laboratorios.dat");
+            /// laboratoriosAleatorios("laboratorios.dat");  CONSULTAR SI HACERLO UNA OPCION
+         ///  muestraLaboratorio("laboratorios.dat");
+         muestraArchivoLaboratorios("laboratorios.dat");
+         printf("\n");
             system("pause");
             system("cls");
             break;;
         case 27:
             break;
-
         default:
             printf("\n\tHa seleccionado una opcion invalida.\n\tPor favor, presione cualquier tecla para continuar\n\n");
             fflush(stdin);
@@ -183,8 +173,7 @@ void menuLaboratorios()
     while(opcion != ESC);
 }
 
-///MENU PRACTICA:
-void menuPracticas()
+void menuPracticas() ///MENU PRACTICA
 {
     char opcion=0;
     do
@@ -197,23 +186,18 @@ void menuPracticas()
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
         printf("\n\nESC para volver al menu principal\n");
-
         replicaChar('*', 50);
-
         fflush(stdin);
         opcion=getch();
         system("cls");
-
         switch(opcion)
         {
         case '1':
-       cargaArchivoPracticas("practicas.dat");
-
+            cargaArchivoPracticas("practicas.dat");
             system("cls");
             break;
         case '2':
-           darBajaPracticas("practicas.dat");
-
+            darBajaPracticas("practicas.dat");
             system("pause");
             system("cls");
             break;
@@ -221,18 +205,17 @@ void menuPracticas()
             ///Modificacion
             break;
         case '4':
-           busquedaPractica("practicas.dat");
-           system("pause");
-           system("cls");
+            busquedaPractica("practicas.dat");
+            system("pause");
+            system("cls");
             break;
         case '5':
-          muestraArchivoPracticas("practicas.dat");
-             system("pause");
-             system("cls");
+            muestraArchivoPracticas("practicas.dat");
+            system("pause");
+            system("cls");
             break;;
         case 27:
             break;
-
         default:
             printf("\n\tHa seleccionado una opcion invalida.\n\tPor favor, presione cualquier tecla para continuar\n\n");
             fflush(stdin);
@@ -244,5 +227,22 @@ void menuPracticas()
     while(opcion != ESC);
 }
 
+void carga_puntos()
+{
+    int i,j;
+    int num_puntos = 2;
+    for (i = 0; i < 8; i++)
+    {
+        // Imprimir los puntos con movimiento
+
+        for (j = 0; j < num_puntos; j++)
+        {
+            printf("..");
+            usleep(300000); // Retraso de 300 milisegundos (0.3 segundos)
+            printf("\b \b"); // Borrar el punto anterior mediante caracteres de escape
+        }
+    }
+    system("cls");
+}
 
 

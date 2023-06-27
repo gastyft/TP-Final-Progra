@@ -37,21 +37,24 @@ void cargaArchivoPracticas(char nombreArchivo[]) ///FUNCION CARGA UN ARCHIVO DE 
             }
             if(10>cantActivo)
             {
-                     system("cls");
-                   practicas = cargaUnaPractica();
+                system("cls");
+                practicas = cargaUnaPractica();
                 practicas.idPractica=cant;
                 practicas= validacionesPractica(nombreArchivo,practicas);
                 practicas= validacionCosto(practicas);
                 fwrite(&practicas, sizeof(stPracticas), 1, archi);
+                printf("\nESC para volver al menu de practicas o cualquier tecla para continuar cargando\n");
             }
             else
             {
                 printf("No se pueden agregar mas practicas \n");
                 printf("Debe dar de baja alguna \n");
+                printf("\nESC para volver al menu de practicas\n");
             }
-            printf("\nESC para salir o cualquier tecla para continuar\n");
+
             fflush(stdin);
             opcion = getch();
+            system("cls");
         }
         while(opcion != ESC);
         fclose(archi);
@@ -62,36 +65,119 @@ void cargaArchivoPracticas(char nombreArchivo[]) ///FUNCION CARGA UN ARCHIVO DE 
     }
 }
 
-void muestraUnaPractica(stPracticas practica) ///FUNCION MUESTRA UNA PRACTICA:
+
+void muestraTodasLasPracticas(stPracticas practica)
 {
-    printf("\n ID: %d", practica.idPractica);
-    printf("\n Nombre: %s", practica.nombre);
-    printf("\n Costo %d", practica.costo);
+
     if(practica.baja ==0)
     {
-        printf("\n PRACTICA ACTIVA\n");
+        printf("\n PRACTICA ACTIVA");
     }
     else
     {
-        printf("\n PRACTICA INACTIVA\n");
+        printf("\n PRACTICA INACTIVA");
     }
-    printf(" ==========================\n");
+    printf("\n ID: %d", practica.idPractica);
+    printf("\n Nombre: %s", practica.nombre);
+    printf("\n Costo %d", practica.costo);
+    printf("\n ==========================");
 }
+
+void muestraPracticasActivas(stPracticas practica)
+{
+    if(practica.baja ==0)
+    {
+        printf("\n PRACTICA ACTIVA");
+        printf("\n ID: %d", practica.idPractica);
+        printf("\n Nombre: %s", practica.nombre);
+        printf("\n Costo %d", practica.costo);
+        printf("\n ==========================");
+    }
+
+}
+
+void muestraPracticasInactivas(stPracticas practica)
+{
+
+    if(practica.baja ==-1)
+    {
+        printf("\n PRACTICA INACTIVA");
+        printf("\n ID: %d", practica.idPractica);
+        printf("\n Nombre: %s", practica.nombre);
+        printf("\n Costo %d", practica.costo);
+        printf("\n ==========================");
+    }
+}
+
+
 
 ///MUESTRA ARCHIVO PRACTICAS:
 void muestraArchivoPracticas(char nombreArchivo[])
 {
     stPracticas practicas;
     FILE *archi = fopen(nombreArchivo, "rb");
+    char o=0;
     if(archi)
     {
-        while(fread(&practicas, sizeof(stPracticas), 1, archi) > 0)
+
+
+        while(o !=ESC)
         {
-            muestraUnaPractica(practicas);
+            printf("\n 1)Mostrar todas las practicas\n 2)Mostrar practicas activas\n 3)Mostrar practicas inactivas\n");
+            printf(" \nPresione ESC para volver al menu de practicas\n");
+            fflush(stdin);
+            o=getch();
+            rewind(archi);
+            system("cls");
+            switch(o)
+            {
+            case '1':
+                while(fread(&practicas, sizeof(stPracticas), 1, archi) > 0)
+                {
+                    muestraTodasLasPracticas(practicas);
+                }
+                printf("\n");
+                system("pause");
+                system("cls");
+                break;
+            case '2':
+                while(fread(&practicas, sizeof(stPracticas), 1, archi) > 0)
+                {
+                    muestraPracticasActivas(practicas);
+                }
+                printf("\n");
+                system("pause");
+                system("cls");
+                break;
+            case '3':
+                while(fread(&practicas, sizeof(stPracticas), 1, archi) > 0)
+                {
+                    muestraPracticasInactivas(practicas);
+                }
+                printf("\n");
+                system("pause");
+                system("cls");
+                break;
+            case 27:
+                break;
+            default:
+                printf("Ingreso una opcion no valida.Presione una tecla cualquiera para continuar o ESC para volver al menu de practicas \n");
+                fflush(stdin);
+                o=getch();
+                system("cls");
+            }
         }
-        fclose(archi);
+
+
     }
+    else
+    {
+        printf("ERROR AL ABRIR EL ARCHIVO \n");
+    }
+    fclose(archi);
+
 }
+
 
 void busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NOMBRE
 {
@@ -149,7 +235,7 @@ void darBajaPracticas(char nombreArchivo[])   ///FUNCION DAR BAJA PRACTICAS
         printf("Ingrese Practica \n");
         fflush(stdin);
         gets(nombre);
-        while(flag && fread(&practicas,sizeof(stPracticas),1,archivo))
+        while(flag && fread(&practicas,sizeof(stPracticas),1,archivo)>0)
         {
             if(strcmpi(practicas.nombre, nombre)==0)
             {
@@ -200,21 +286,137 @@ stPracticas validacionesPractica(char nombreArchivo[],stPracticas practica) ///V
     return practica;
 }
 
-stPracticas validacionCosto( stPracticas valPracticas){
+stPracticas validacionCosto( stPracticas valPracticas)
+{
     int flag=1;
-    while(flag){
-        if( valPracticas.costo >= 1000 && valPracticas.costo <= 10000){
-        flag = 0;
+    while(flag)
+    {
+        if( valPracticas.costo >= 1000 && valPracticas.costo <= 10000)
+        {
+            flag = 0;
         }
-          else{
-        printf("Ingreso un costo no valido, ingrese un nuevo costo entre 1000 y 10000\n");
-        scanf("%d",&valPracticas.costo);
-        system("cls");
+        else
+        {
+            printf("Ingreso un costo no valido, ingrese un nuevo costo entre 1000 y 10000\n");
+            scanf("%d",&valPracticas.costo);
+            system("cls");
+        }
     }
+    return valPracticas;
+}
+void darAltaInactivo(char nombreArchivo[])
+{
+    FILE*archivo= fopen(nombreArchivo,"r+b");
+    int flag=1;
+    int flag1=1;
+    char nombre[30];
+    stPracticas practica;
+    if(archivo)
+    {
+        while(fread(&practica,sizeof(stPracticas),1,archivo)>0){
+
+       muestraPracticasInactivas(practica);
+       if(practica.baja==-1){
+        flag1=0;
+       }
+
+        }
+            if(!flag1){
+            printf("\nIngrese nombre de practica a dar de alta\n");
+            fflush(archivo);
+            gets(nombre);
+
+            }
+        do
+        {
+            rewind(archivo);
+            while( flag && fread(&practica,sizeof(stPracticas),1,archivo)>0)
+            {
+                if(strcmpi(practica.nombre,nombre)==0)
+                {
+                    if(practica.baja != 0)
+                    {
+                        practica.baja=0;
+                        flag=0;
+
+                        fseek(archivo,(-1)*sizeof(stPracticas),SEEK_CUR);
+                        fwrite(&practica,sizeof(stPracticas),1,archivo);
+                        system("cls");
+                        printf("DADO DE ALTA CORRECTAMENTE \n");
+                        muestraPracticasActivas(practica);
+                    }
+                }
+            }
+
+            if(flag && flag1==0)
+            {
+
+                printf("\nIngreso un nombre incorrecto. ingrese un nombre que este inactivo\n");
+                fflush(stdin);
+                gets(nombre);
+            }
+            else{
+                printf("No hay practicas inactivas \n");
+                flag=0;
+            }
+        }
+        while(flag);
+
+
     }
-return valPracticas;
+    else
+    {
+        printf("ERROR AL ABRIR EL ARCHIVO\n");
+    }
+
+    fclose(archivo);
 }
 
+void menuAltasPracticas(char nombreArchivo[])
+{
 
+    char o=0;
+
+
+    do
+    {
+
+        printf("1)Dar alta una nueva practica\n 2)Dar alta una practica inactiva\n");
+        fflush(stdin);
+        o=getch();
+        system("cls");
+
+        switch(o)
+        {
+        case '1':
+            cargaArchivoPracticas(nombreArchivo);
+            printf("\n");
+            system("pause");
+            system("cls");
+            break;
+
+        case '2':
+            darAltaInactivo(nombreArchivo);
+             printf("\n");
+            system("pause");
+            system("cls");
+            break;
+        case 27:
+
+            break;
+        default:
+
+            printf("Ingreso opcion correcta presione cualquier tecla para continuar o ESC para salir a menu de Practicas\n");
+            fflush(stdin);
+            o=getch();
+        }
+
+    }
+    while(o!=ESC);
+
+
+
+
+}
 
 

@@ -51,7 +51,7 @@ void menuPrincipal() ///FUNCION PARA MENU PRINCIPAL
       //     printf("Cerrando APP. Gracias por confiar en nosotros");
        //     carga_puntos();
        //     system("cls");
-       //   firma();
+        firma();
             break;
         default:
             printf("\n\tHa seleccionado una opcion invalida.\n\tPor favor, presione cualquier tecla para continuar\n\n");
@@ -84,7 +84,7 @@ void menuPacientes()///FUNCION MENU PACIENTES
         switch(opcion)
         {
         case '1':
-            cargaArchivoPacientes("pacientes.dat");
+            menuAltasPacientes("pacientes.dat");
             system("cls");
             break;
         case '2':
@@ -137,7 +137,7 @@ void menuLaboratorios() ///MENU LABORATORIO:
         switch(opcion)
         {
         case '1':
-            cargaArchivoLaboratorios("laboratorios.dat");
+           menuAltasLaboratorios("laboratorios.dat");
             system("cls");
             break;
         case '2':
@@ -153,8 +153,8 @@ void menuLaboratorios() ///MENU LABORATORIO:
                 system("cls");
             break;
         case '5':
-            /// laboratoriosAleatorios("laboratorios.dat");  CONSULTAR SI HACERLO UNA OPCION
-         ///  muestraLaboratorio("laboratorios.dat");
+        /// laboratoriosAleatorios("laboratorios.dat");
+
          muestraArchivoLaboratorios("laboratorios.dat");
          printf("\n");
             system("pause");
@@ -193,7 +193,7 @@ void menuPracticas() ///MENU PRACTICA
         switch(opcion)
         {
         case '1':
-            cargaArchivoPracticas("practicas.dat");
+            menuAltasPracticas("practicas.dat");
             system("cls");
             break;
         case '2':
@@ -211,7 +211,7 @@ void menuPracticas() ///MENU PRACTICA
             break;
         case '5':
             muestraArchivoPracticas("practicas.dat");
-            system("pause");
+            printf("\n");
             system("cls");
             break;;
         case 27:
@@ -244,5 +244,10 @@ void carga_puntos()
     }
     system("cls");
 }
+
+
+
+
+
 
 

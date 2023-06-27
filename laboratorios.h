@@ -35,6 +35,12 @@ void laboratoriosAleatorios(char nombreArchivo[]);
 void muestraUnLaboratorio(stLaboratorios laboratorio);
 void muestraArchivoLaboratorios(char nombreArchivo[]);
 void cargaArchivoLaboratorios(char nombreArchivo[]);
-void busquedaLaboratorio (char nombreArchivo[]);
+void busquedaLaboratorio(char nombreArchivo[]);
+void menuAltasLaboratorios(char nombreArchivo[]);
+void muestraLaboratoriosInactivos(stLaboratorios laboratorio);
+void muestraLaboratoriosActivos(stLaboratorios laboratorio);
+int validacionId();
 stLaboratorios cargaUnLaboratorio();
+stLaboratorios validacionFecha(stLaboratorios laboratorio);
+stLaboratorios validacionPractica(stLaboratorios laboratorio);
 #endif // LABORATORIOS_H_INCLUDED

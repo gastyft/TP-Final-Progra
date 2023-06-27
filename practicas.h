@@ -18,11 +18,16 @@ typedef struct
 
 
 void cargaArchivoPracticas(char nombreArchivo[]);
-void muestraUnaPractica(stPracticas practica);
+void darAltaInactivo(char nombreArchivo[]);
+void muestraPracticasInactivas(stPracticas practica);
+void muestraTodasLasPracticas(stPracticas practica); ///ACTIVAS E INACTIVAS
+void muestraPracticasActivas(stPracticas practica);
 void muestraArchivoPracticas(char nombreArchivo[]);
 void darBajaPracticas(char nombreArchivo[]);
 void validacionesPracticaId(char nombreArchivo[]);
 void busquedaPractica (char nombreArchivo[]);
+void menuAltasPracticas(char nombreArchivo[]);
+
 stPracticas validacionCosto(stPracticas valPracticas);
 stPracticas validacionesPractica(char nombreArchivo[],stPracticas practica);
 stPracticas cargaUnaPractica();

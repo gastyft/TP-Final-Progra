@@ -9,9 +9,10 @@ void darBajaLaboratorios(char nombreArchivo[]) ///DAR BAJA LABORATORIOS
     int flag=1;
     if(archivo != NULL)
     {
-        printf("Ingrese id de laboratorio a dar de baja \n");
+        printf("Ingrese ID de laboratorio a dar de baja \n");
         fflush(stdin);
         scanf("%d",&idLabs);
+        system("cls");
         while(flag && fread(&laboratorio,sizeof(stLaboratorios),1,archivo))
         {
             if(laboratorio.idLab ==idLabs)
@@ -19,6 +20,7 @@ void darBajaLaboratorios(char nombreArchivo[]) ///DAR BAJA LABORATORIOS
                 if(laboratorio.baja == -1)
                 {
                     printf("Ya esta dado de baja el Laboratorio %d \n",laboratorio.idLab);
+
                     flag=0;
                 }
                 else
@@ -33,7 +35,9 @@ void darBajaLaboratorios(char nombreArchivo[]) ///DAR BAJA LABORATORIOS
         }
         if(flag)
         {
-            printf("No se encontro el laboratorio con ese nombre. Intente nuevamente \n");
+            printf("No se encontro el laboratorio con el ID %d. Intente nuevamente \n",idLabs);
+            system("pause");
+            system("cls");
         }
     }
     else
@@ -50,20 +54,7 @@ void laboratoriosAleatorios(char nombreArchivo[]) /// LABORATORIOS ALEATORIOS
     stFecha fecha;
     stLaboratorios laboratorio;
     time_t tiempo_actual;
-    /**
-     estructura  tm para saber de donde sale
-    struct tm {
-        int tm_sec;   // segundos [0-60]
-        int tm_min;   // minutos [0-59]
-        int tm_hour;  // horas [0-23]
-        int tm_mday;  // día del mes [1-31]
-        int tm_mon;   // mes [0-11]
-        int tm_year;  //desde 1900 a año actual
-        int tm_wday;  // día de la semana [0-6] (domingo = 0)
-        int tm_yday;  // día del año [0-365]
-        int tm_isdst; // horario de verano (0 = no, >0 = sí, <0 = desconocido) // eso no lo entendi
-    };
-    */
+
 //Fin estructura TM
     struct tm *info_tiempo;
     char dia[3];
@@ -170,11 +161,11 @@ void laboratoriosAleatorios(char nombreArchivo[]) /// LABORATORIOS ALEATORIOS
             fseek(archiLab,0,SEEK_END);
             cont=ftell(archiLab)/sizeof(laboratorio);
 
-            laboratorio.idPaciente=  rand()%10 +1;
+            laboratorio.idPaciente=  rand()%10 +1; ///FUNCION ACTIVA O INACTIVA PARA CONTAR CCON contador para activos Y HACER UN RAND CON EL TOTAL
             laboratorio.anio = fecha.anio;
             laboratorio.mes =fecha.mes;
             laboratorio.dia= fecha.dia;
-            laboratorio.PracticaRealizada= 1+ rand() % 10;
+            laboratorio.PracticaRealizada= 1+ rand() % 10;  /// FUNCION ACTIVA O INACTIVA
             laboratorio.baja =0;
             cont++;
             laboratorio.idLab=cont;
@@ -196,51 +187,6 @@ void laboratoriosAleatorios(char nombreArchivo[]) /// LABORATORIOS ALEATORIOS
 ///eliminar (lógicamente) el laboratorio anterior e
 ///insertar el nuevo.
 
-void validacionesLabs(char nombreArchivo[]) ///VALIDACIONES DE LABORATORIOS FECHAS ver si ID tambien
-{
-    /*
-        stLaboratorios labValido;
-
-        FILE *archivo=fopen(nombreArchivo,"r+b");
-        rewind(archivo);
-
-        while(  fread(&labValido,sizeof(stLaboratorios),1,archivo)>0 ) /// VALIDACION DE ID LAB
-        {
-
-            if(lab.idLab == labValido.idLab)
-            {
-
-                printf("El laboratorio ya existe, ingrese otro laboratorio \n");
-                printf("Ingrese laboratorio nuevo \n");
-                scanf("%d",&lab.idLab);
-
-                rewind(archivo);
-            }
-        }
-        rewind(archivo);
-        while(  fread(&labValido,sizeof(stLaboratorios),1,archivo)>0 ) ///VALIDACION DE ID PACIENTE
-        {
-            if(lab.idPaciente == labValido.idPaciente)
-            {
-
-                printf("El id del paciente ya existe, ingrese otro id de paciente \n");
-                printf("Ingrese id paciente nuevo \n");
-                scanf("%d",&lab.idPaciente);
-
-                rewind(archivo);
-            }
-        }
-        rewind(archivo);
-        }
-
-
-
-        fclose(archivo);
-
-
-    }
-    */
-}
 
 void muestraUnLaboratorio(stLaboratorios laboratorio)
 {
@@ -299,26 +245,22 @@ void muestraArchivoLaboratorios(char nombreArchivo[]) ///MUESTRA ARCHIVO LABORAT
         }
         fclose(archi);
     }
+    else
+    {
+
+        printf("ERROR AL ABRIR EL ARCHIVO \n");
+    }
 }
 
 stLaboratorios cargaUnLaboratorio() ///FUNCION CARGA UN LABORATORIO
 {
     stLaboratorios laboratorio;
 
-    printf("\n Id Paciente: ");
-    scanf("%d", &laboratorio.idPaciente);
+    laboratorio.idPaciente= validacionId();
 
-    printf("\n Anio: ");
-    scanf("%d", &laboratorio.anio);
+    laboratorio=validacionFecha(laboratorio);
 
-    printf("\n Mes: ");
-    scanf("%d", &laboratorio.mes);
-
-    printf("\n Dia: ");
-    scanf("%d", &laboratorio.dia);
-
-    printf("\n Id practica realizada: ");
-    scanf("%d", &laboratorio.PracticaRealizada);
+    laboratorio=validacionPractica(laboratorio);
 
     return laboratorio;
 }
@@ -331,8 +273,7 @@ void cargaArchivoLaboratorios(char nombreArchivo[]) ///FUNCION CARGA UN ARCHIVO 
     FILE *archi = fopen(nombreArchivo, "ab");
     if(archi)
     {
-        printf("LISTA DE PRACTICAS");
-        muestraArchivoPracticas("practicas.dat");
+
         fseek(archi,0,SEEK_END);
         cant=ftell(archi)/sizeof(stLaboratorios);
         do
@@ -340,6 +281,7 @@ void cargaArchivoLaboratorios(char nombreArchivo[]) ///FUNCION CARGA UN ARCHIVO 
             cant++;
             laboratorios = cargaUnLaboratorio();
             laboratorios.idLab=cant;
+            system("cls");
             fwrite(&laboratorios, sizeof(stLaboratorios), 1, archi);
             printf("\nESC para salir o cualquier tecla para continuar");
             opcion = getch();
@@ -390,3 +332,410 @@ void busquedaLaboratorio (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR
     }
     fclose(archivo);
 }
+
+
+
+int validacionId() /// VALIDACION DE UN ID DE PACIENTE PARA QUE NO SEA INEXISTENTE
+{
+
+
+    stPaciente paciente;
+    int flag=1,id;
+    FILE *archivo= fopen("pacientes.dat","r+b");
+    if(archivo != NULL)
+    {
+        do
+        {
+            printf("\n Id Paciente: ");
+            scanf("%d", &id);
+            rewind(archivo);
+            while(flag && fread(&paciente,sizeof(stPaciente),1,archivo)>0 )
+            {
+                if(id == paciente.idPaciente)
+                {
+                    flag=0;
+                }
+            }
+            if(flag)
+            {
+                printf("Ingreso un ID de paciente %d no existe en la base de datos. Ingrese uno nuevo.\n",id);
+            }
+
+        }
+        while(flag);
+
+
+    }
+    else
+    {
+        printf("NO SE PUDO ABRIR EL ARCHIVO\n");
+    }
+    return id;
+}
+
+stLaboratorios validacionFecha(stLaboratorios laboratorio) ///VALIDACION DE UNA FECHA MENOR A LA ACTUAL
+{
+
+    stFecha fecha;
+    FILE *archiLab=fopen("laboratorios.dat","r+b");
+    time_t tiempo_actual;
+
+//Fin estructura TM
+    struct tm *info_tiempo;
+    char dia[3];
+    char mes[3];
+    char anio[5];
+    int diaActual,mesActual,anioActual,diasMaximos=0;
+
+    // Obtenemos el tiempo actual
+    tiempo_actual = time(NULL);
+
+    // Convertimos el tiempo a una estructura de tm
+    info_tiempo = localtime(&tiempo_actual);
+
+    // Obtenemos el día del mes como cadena
+    strftime(dia, sizeof(dia), "%d", info_tiempo);
+    strftime(mes, sizeof(mes),"%m",info_tiempo);
+    strftime(anio, sizeof(anio),"%Y",info_tiempo);
+
+    // Convertimos la cadena a entero
+    diaActual = atoi(dia);
+    mesActual = atoi(mes);
+    anioActual =atoi(anio);
+
+    if(archiLab!= NULL)
+    {
+//srand(time(NULL));
+
+        do
+        {
+            printf("Ingrese anio\n");
+            scanf("%d",&fecha.anio);
+        }
+        while(fecha.anio>anioActual);      ///PIDE AÑO MENOR O IGUAL A 2023
+
+
+
+        if(fecha.anio == anioActual)  /// SI ES AÑO ACTUAL ENTONCES PIDE MES MENOR O IGUAL AL ACTUAL
+        {
+            do
+            {
+                printf("Ingrese mes\n");
+                scanf("%d",&fecha.mes);
+            }
+            while(fecha.mes>mesActual);
+
+            if(fecha.mes == mesActual) /// SI EL MES ES ACTUAL ENTONCES VALIDA QUE MES ES PARA ASIGNARLE LE MAXIMO DE DIAS DE ESE MES
+            {
+
+                do    /// si es menor al dia actual no habria porque validar en el switch
+                {
+                    printf("Ingrese dia\n");   /// PIDE UN DIA MENOR O IGUAL AL ACTUAL
+                    scanf("%d",&fecha.dia);
+                }
+                while(fecha.dia > diaActual);
+
+            }
+            else
+            {
+                switch (fecha.mes)
+                {
+                case 2:
+                    // Verificar si el año es bisiesto para febrero
+                    if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
+                        diasMaximos = 29;
+                    else
+                        diasMaximos = 28;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    diasMaximos = 30;
+                    break;
+                default:
+                    diasMaximos = 31;
+                    break;
+                }
+                do
+                {
+                    printf("Ingrese dia\n");
+                    scanf("%d",&fecha.dia);
+                }
+                while(fecha.dia > diasMaximos);
+            }
+        }
+        else
+        {
+            do
+            {
+                printf("Ingrese mes\n");
+                scanf("%d",&fecha.mes);
+            }
+            while(fecha.mes>12);
+            switch (fecha.mes)
+            {
+            case 2:
+                // Verificar si el año es bisiesto para febrero
+                if ((fecha.anio % 4 == 0 && fecha.anio % 100 != 0) || fecha.anio % 400 == 0)
+                    diasMaximos = 29;
+                else
+                    diasMaximos = 28;
+                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                diasMaximos = 30;
+                break;
+            default:
+                diasMaximos = 31;
+                break;
+            }
+            do
+            {
+                printf("Ingrese dia \n");
+                scanf("%d",&fecha.dia);
+            }
+            while(fecha.dia >diasMaximos);     ///ESTABA EL RAND
+
+        }
+    }
+
+
+
+
+    else
+    {
+        printf("ERROR AL ABRIR O CREAR EL ARCHIVO \n");
+    }
+    laboratorio.dia=fecha.dia;
+    laboratorio.anio=fecha.anio;
+    laboratorio.mes=fecha.mes;
+    fclose(archiLab);
+    return laboratorio;
+}
+
+stLaboratorios validacionPractica(stLaboratorios laboratorio)  /// VALIDACION DE UNA PRACTICA EXISTENTE
+{
+    int flag=1,id;
+    stPracticas practica;
+
+    FILE *archivo= fopen("practicas.dat","r+b");
+
+    if(archivo != NULL)
+    {
+        printf("\n LISTA DE PRACTICAS ACTIVAS");
+        do
+        {
+
+            while(fread(&practica,sizeof(stPracticas),1,archivo)>0)
+            {
+                muestraPracticasActivas(practica);
+            }
+            printf("\n Ingrese ID practica realizada: ");
+            scanf("%d", &id);
+
+            rewind(archivo);
+            while(flag && fread(&practica,sizeof(stPracticas),1,archivo)>0 )
+            {
+                if(id == practica.idPractica)
+                {
+                    if(practica.baja==0)
+                    {
+                        flag=0;
+
+                    }
+                }
+            }
+            if(flag)
+            {
+                printf("Ingreso el ID %d de una practica que no existe en la base de datos o esta inactiva. Ingrese uno nuevo.\n",id);
+
+            }
+
+        }
+        while(flag);
+
+
+    }
+    else
+    {
+        printf("NO SE PUDO ABRIR EL ARCHIVO\n");
+    }
+    fclose(archivo);
+    laboratorio.PracticaRealizada=id;
+
+    return laboratorio;
+}
+
+void darAltaInactivoLaboratorio(char nombreArchivo[])
+{
+    FILE*archivo= fopen(nombreArchivo,"r+b");
+    int flag=1,id;
+    int flag1=1;
+    char nombre[30];
+    stLaboratorios laboratorio;
+    if(archivo)
+    {
+        while(fread(&laboratorio,sizeof(stLaboratorios),1,archivo)>0){
+        muestraLaboratoriosInactivos(laboratorio);
+
+              if(laboratorio.idLab==-1){
+        flag1=0;
+              }
+        }
+         if(!flag1){
+            printf("Ingrese ID de laboratorio a dar de alta\n");
+            scanf("%d",&id);
+         }
+        do
+        {
+            rewind(archivo);
+            while( flag && fread(&laboratorio,sizeof(stLaboratorios),1,archivo)>0)
+            {
+                if(laboratorio.idLab ==id)
+                {
+                    if(laboratorio.baja != 0)
+                    {
+                        laboratorio.baja=0;
+                        flag=0;
+
+                        fseek(archivo,(-1)*sizeof(stLaboratorios),SEEK_CUR);
+                        fwrite(&laboratorio,sizeof(stLaboratorios),1,archivo);
+                        printf("DADO DE ALTA CORRECTAMENTE \n");
+                        muestraUnLaboratorio(laboratorio);
+                    }
+                }
+            }
+
+             if(flag && flag1==0)
+            {
+
+                printf("\nIngreso un ID incorrecto. ingrese un ID que este inactivo\n");
+                fflush(stdin);
+                gets(nombre);
+            }
+            else{
+                  printf("No hay laboratorios inactivos \n");
+                flag=0;
+
+            }
+        }
+        while(flag);
+
+
+    }
+    else
+    {
+        printf("ERROR AL ABRIR EL ARCHIVO\n");
+    }
+
+    fclose(archivo);
+}
+void menuAltasLaboratorios(char nombreArchivo[])
+{
+
+    char o=0;
+
+
+    do
+    {
+
+        printf("1)Dar alta un nuevo laboratorio\n 2)Dar alta un laboratorio inactivo\n");
+        fflush(stdin);
+        o=getch();
+        system("cls");
+
+        switch(o)
+        {
+        case '1':
+            cargaArchivoLaboratorios(nombreArchivo);
+            system("pause");
+            system("cls");
+            break;
+
+        case '2':
+
+            darAltaInactivoLaboratorio(nombreArchivo);
+            system("pause");
+            system("cls");
+            break;
+        case 27:
+
+            break;
+        default:
+
+            printf("Ingreso opcion correcta presione cualquier tecla para continuar o ESC para salir a menu de Practicas\n");
+            fflush(stdin);
+            o=getch();
+        }
+
+    }
+    while(o!=ESC);
+
+
+
+
+}
+
+void muestraLaboratoriosInactivos(stLaboratorios laboratorio)
+{
+
+    FILE *archi =fopen("laboratorios.dat","r+b");
+    if(archi)
+    {
+
+        while(fread(&laboratorio, sizeof(stLaboratorios), 1, archi) > 0)
+        {
+            if(laboratorio.baja== -1)
+            {
+                printf("\n LABORATORIO INACTIVO");
+                muestraUnLaboratorio(laboratorio);
+            }
+        }
+    }
+    else
+    {
+        printf("ERROR AL ABRIR ARACHIVO \n");
+    }
+    fclose(archi);
+
+
+}
+void muestraLaboratoriosActivos(stLaboratorios laboratorio)
+{
+
+    FILE *archi =fopen("laboratorios.dat","r+b");
+    if(archi)
+    {
+
+        while(fread(&laboratorio, sizeof(stLaboratorios), 1, archi) > 0)
+        {
+            if(laboratorio.baja== 0)
+            {
+                printf("\n LABORATORIO ACTIVO");
+                muestraUnLaboratorio(laboratorio);
+            }
+        }
+    }
+    else
+    {
+        printf("ERROR AL ABRIR ARACHIVO \n");
+    }
+    fclose(archi);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

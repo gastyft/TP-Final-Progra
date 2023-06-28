@@ -291,7 +291,7 @@ void cargaArchivoLaboratorios(char nombreArchivo[]) ///FUNCION CARGA UN ARCHIVO 
     }
 }
 
-void busquedaLaboratorio (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NOMBRE
+stLaboratorios busquedaLaboratorio(char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NOMBRE
 {
     int flag=0;
     int idBuscar;
@@ -331,6 +331,7 @@ void busquedaLaboratorio (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR
         printf("ERROR AL ABRIR ARCHIVO\n");
     }
     fclose(archivo);
+    return laboratorios;
 }
 
 
@@ -730,6 +731,45 @@ void muestraLaboratoriosActivos(stLaboratorios laboratorio)
 
 
 
+
+
+void modificacionLaboratorio(char nombreArchivo[] )
+{
+    FILE *archivo=fopen(nombreArchivo,"r+b");
+stLaboratorios laboratorio;
+stLaboratorios laboratorioV;
+    if(archivo){
+
+laboratorio=busquedaLaboratorio(nombreArchivo);
+printf("ID %d",laboratorio.idLab);
+laboratorioV = modificaUnLaboratorio(laboratorio);
+
+rewind(archivo);
+fseek(archivo,(laboratorioV.idLab-1)*sizeof(stLaboratorios),SEEK_SET);
+fwrite(&laboratorioV,sizeof(stLaboratorios),1,archivo);
+    }
+    else{
+        printf("ERROR AL ABRIR EL ARCHIVO \n");
+    }
+
+fclose(archivo);
+
+}
+
+
+stLaboratorios modificaUnLaboratorio(stLaboratorios laboratorio)
+{
+
+
+
+    laboratorio.idPaciente= validacionId();
+
+    laboratorio=validacionFecha(laboratorio);
+
+    laboratorio=validacionPractica(laboratorio);
+
+    return laboratorio;
+}
 
 
 

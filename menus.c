@@ -22,8 +22,8 @@ void menuPrincipal() ///FUNCION PARA MENU PRINCIPAL
 {
     char opcion=0;
     system("COLOR B");
-   // printf("Abriendo APP, espere");
-   // carga_puntos();
+///  printf("Abriendo APP, espere");
+   /// carga_puntos();
     do
     {
         muestraTituloMenu("\n\t\tMENU PRINCIPAL\n");
@@ -48,9 +48,9 @@ void menuPrincipal() ///FUNCION PARA MENU PRINCIPAL
             menuPracticas();
             break;
         case 27:
-      //     printf("Cerrando APP. Gracias por confiar en nosotros");
-       //     carga_puntos();
-       //     system("cls");
+     ///   printf("Cerrando APP. Gracias por confiar en nosotros");
+        ///   carga_puntos();
+           system("cls");
         firma();
             break;
         default:
@@ -93,7 +93,7 @@ void menuPacientes()///FUNCION MENU PACIENTES
             system("cls");
             break;
         case '3':
-            ///modificar();
+          menuModificacion("pacientes.dat");
             break;
         case '4':
             busquedaPaciente("pacientes.dat");
@@ -129,6 +129,7 @@ void menuLaboratorios() ///MENU LABORATORIO:
         printf("\n 3)Modificacion");
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
+        printf("\n 6)Laboratorios aleatorios");
         printf("\n\nESC para volver al menu principal\n");
         replicaChar('*', 50);
         fflush(stdin);
@@ -144,7 +145,7 @@ void menuLaboratorios() ///MENU LABORATORIO:
             darBajaLaboratorios("laboratorios.dat");
             break;
         case '3':
-            ///Modificacion
+         modificacionLaboratorio("laboratorios.dat");
             break;
         case '4':
             busquedaLaboratorio ("laboratorios.dat");
@@ -153,13 +154,16 @@ void menuLaboratorios() ///MENU LABORATORIO:
                 system("cls");
             break;
         case '5':
-        /// laboratoriosAleatorios("laboratorios.dat");
+
 
          muestraArchivoLaboratorios("laboratorios.dat");
          printf("\n");
             system("pause");
             system("cls");
-            break;;
+            break;
+        case '6':
+            laboratoriosAleatorios("laboratorios.dat");
+            break;
         case 27:
             break;
         default:
@@ -185,6 +189,7 @@ void menuPracticas() ///MENU PRACTICA
         printf("\n 3)Modificacion");
         printf("\n 4)Consulta");
         printf("\n 5)Listas");
+
         printf("\n\nESC para volver al menu principal\n");
         replicaChar('*', 50);
         fflush(stdin);
@@ -202,7 +207,7 @@ void menuPracticas() ///MENU PRACTICA
             system("cls");
             break;
         case '3':
-            ///Modificacion
+            modificacionPractica("practicas.dat");
             break;
         case '4':
             busquedaPractica("practicas.dat");

@@ -195,10 +195,10 @@ void darBajaPacientes(char nombreArchivo[]) ///DAR DE BAJA PACIENTES
     fclose(archivo);
 }
 
-void opcionBuscaPacienteDNI (char nombreArchivo[]) ///BUSCAR PACIENTE DNI
+stPaciente opcionBuscaPacienteDNI (char nombreArchivo[]) ///BUSCAR PACIENTE DNI
 {
     char dniABuscar[30];
-
+stPaciente paciente;
     FILE * archivo= fopen(nombreArchivo, "rb");
     if (archivo!=NULL)
     {
@@ -206,7 +206,7 @@ void opcionBuscaPacienteDNI (char nombreArchivo[]) ///BUSCAR PACIENTE DNI
         fflush(stdin);
         gets(dniABuscar);
         system("cls");
-        stPaciente paciente = buscarPacientePorDNI(nombreArchivo,dniABuscar);
+       paciente = buscarPacientePorDNI(nombreArchivo,dniABuscar);
 
         if (atoi(paciente.dni) != -1)
         {
@@ -224,6 +224,7 @@ void opcionBuscaPacienteDNI (char nombreArchivo[]) ///BUSCAR PACIENTE DNI
         printf("FALLO AL ABRIR EL ARCHIVO\n");
     }
     fclose(archivo);
+    return paciente;
 }
 
 
@@ -274,10 +275,10 @@ stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]) ///
     return paciente;
 }
 
-void opcion_busca_paciente_apellido (char nombreArchivo[]) ///BUSCA PACIENTE POR APELLIDO
+stPaciente opcion_busca_paciente_apellido (char nombreArchivo[]) ///BUSCA PACIENTE POR APELLIDO
 {
     char apellidoABuscar[30];
-
+stPaciente paciente;
     FILE *archivo= fopen(nombreArchivo, "rb");
     if (archivo!=NULL)
     {
@@ -285,7 +286,7 @@ void opcion_busca_paciente_apellido (char nombreArchivo[]) ///BUSCA PACIENTE POR
         fflush(stdin);
         gets(apellidoABuscar);
         system("cls");
-        stPaciente paciente = buscarPacientePorApellido(nombreArchivo,apellidoABuscar);
+      paciente = buscarPacientePorApellido(nombreArchivo,apellidoABuscar);
         if (atoi(paciente.apellido) != -1)
         {
             fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
@@ -301,6 +302,7 @@ void opcion_busca_paciente_apellido (char nombreArchivo[]) ///BUSCA PACIENTE POR
     {
         printf("FALLO AL ABRIR EL ARCHIVO");
     }
+    return paciente;
 }
 
 /**
@@ -362,13 +364,13 @@ stPaciente busquedaPaciente (char nombreArchivo[]) ///SUB MENU DE BUSQUEDA POR D
         switch(o)
         {
         case '1':
-            opcionBuscaPacienteDNI(nombreArchivo);
+         paciente=   opcionBuscaPacienteDNI(nombreArchivo);
             printf("\n");
             system("pause");
             system("cls");
             break;
         case '2':
-            opcion_busca_paciente_apellido(nombreArchivo);
+           paciente= opcion_busca_paciente_apellido(nombreArchivo);
             printf("\n");
             system("pause");
             system("cls");
@@ -586,9 +588,78 @@ void darAltaInactivoPacientes(char nombreArchivo[])
 
     }
 
+void modificacion(char nombreArchivo[],stPaciente paciente )
+{
+stPaciente pacienteV;
+
+FILE *archivo =fopen(nombreArchivo,"r+b");
+printf("ID: %d",paciente.idPaciente);
+pacienteV=modificaUnPaciente(paciente);
+system("pause");
+rewind(archivo);
+fseek(archivo,(pacienteV.idPaciente-1)*sizeof(stPaciente),SEEK_SET);
+fwrite(&pacienteV,sizeof(stPaciente),1,archivo);
+
+muestraUnPaciente(paciente);
+fclose(archivo);
+
+}
+void menuModificacion(char nombreArchivo[])
+{
+
+ char o=0;
+    stPaciente paciente;
 
 
 
+        printf("1)Buscar por DNI \n");
+        printf("2)Buscar por  apellido\n");
+        fflush(stdin);
+        o=getch();
+
+        switch(o)
+        {
+        case '1':
+         paciente=opcionBuscaPacienteDNI(nombreArchivo);
+
+            modificacion(nombreArchivo,paciente);
+            printf("\n");
+
+
+            break;
+        case '2':
+           paciente= opcion_busca_paciente_apellido(nombreArchivo);
+            modificacion(nombreArchivo,paciente);
+            printf("\n");
+
+            break;
+
+        }
 
 
 
+}
+
+stPaciente modificaUnPaciente(stPaciente paciente)
+{
+
+    printf("\nIngrese los datos del paciente:\n");
+    printf("\n Nombre: ");
+    fflush(stdin);
+    gets(paciente.nombre);
+
+    printf("\n Apellido: ");
+    fflush(stdin);
+    gets(paciente.apellido);
+
+    printf("\n DNI: ");
+    fflush(stdin);
+    gets(paciente.dni);
+
+    printf("\n Telefono: ");
+    fflush(stdin);
+    gets(paciente.movil);
+
+
+    return paciente;
+}

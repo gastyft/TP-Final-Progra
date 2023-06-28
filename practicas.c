@@ -179,9 +179,9 @@ void muestraArchivoPracticas(char nombreArchivo[])
 }
 
 
-void busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NOMBRE
+stPracticas busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NOMBRE
 {
-    int flag=0;
+    int flag=1;
     char nombreAuxiliar[30];
     stPracticas practicas;
     FILE*  archivo=fopen(nombreArchivo,"r+b");
@@ -192,7 +192,7 @@ void busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NO
         gets(nombreAuxiliar);
 
         system("cls");
-        while(fread(&practicas,sizeof(stPracticas),1,archivo)>0)
+        while(flag && fread(&practicas,sizeof(stPracticas),1,archivo)>0)
         {
             if (strcmpi(practicas.nombre,nombreAuxiliar)==0)
             {
@@ -209,7 +209,7 @@ void busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NO
                 printf("ID Practica: %d \n",practicas.idPractica);
                 printf("NOMBRE: %s \n",practicas.nombre);
                 printf("COSTO  %d \n",practicas.costo);
-                flag=1;
+                flag=0;
             }
         }
         if(!flag)
@@ -222,6 +222,7 @@ void busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA POR NO
         printf("ERROR AL ABRIR ARCHIVO\n");
     }
     fclose(archivo);
+    return practicas;
 }
 
 void darBajaPracticas(char nombreArchivo[])   ///FUNCION DAR BAJA PRACTICAS
@@ -420,3 +421,42 @@ void menuAltasPracticas(char nombreArchivo[])
 }
 
 
+
+void modificacionPractica(char nombreArchivo[] )
+{
+    FILE *archivo=fopen(nombreArchivo,"r+b");
+    if(archivo){
+stPracticas practicaV;
+stPracticas practica;
+
+practica=busquedaPractica(nombreArchivo);
+printf("ID %d",practica.idPractica);
+practicaV=modificaUnaPractica(practica);
+
+rewind(archivo);
+fseek(archivo,(practicaV.idPractica-1)*sizeof(stPracticas),SEEK_SET);
+fwrite(&practicaV,sizeof(stPracticas),1,archivo);
+    }
+    else{
+        printf("ERROR AL ABRIR EL ARCHIVO \n");
+    }
+
+fclose(archivo);
+
+}
+
+
+stPracticas modificaUnaPractica(stPracticas practicas)
+{
+
+    printf("\nIngreso de practicas:\n");
+    printf("\n Nombre: ");
+    fflush(stdin);
+    gets(practicas.nombre);
+     practicas= validacionesPractica("practicas.dat",practicas);
+    printf("\n Costo: ");
+    scanf("%d",&practicas.costo);
+ practicas=validacionCosto(practicas);
+
+    return practicas;
+}

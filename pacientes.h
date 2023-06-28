@@ -27,17 +27,20 @@ typedef struct
 void muestraUnPaciente(stPaciente paciente);
 void cargaArchivoPacientes(char nombreArchivo[]);
 void muestraArchivoPacientes(char nombreArchivo[]);
-void opcionBuscaPacienteDNI (char nombreArchivo[]);
+stPaciente opcionBuscaPacienteDNI (char nombreArchivo[]);
 void darBajaPacientes(char nombreArchivo[]);
-void opcion_busca_paciente_apellido (char nombreArchivo[]);
+stPaciente opcion_busca_paciente_apellido (char nombreArchivo[]);
 void practicaPaciente(stPaciente paciente);
 void menuAltasPacientes(char nombreArchivo[]);
 void menuAltasPacientes(char nombreArchivo[]);
 void muestraPacientesInactivos(stPaciente paciente);
+void modificacion(char nombreArchivo[],stPaciente paciente);
+void menuModificacion(char nombreArchivo[]);
 int costoTotal(stPaciente paciente);
 stPaciente cargaUnPaciente();
 stPaciente buscarPacientePorDNI (char nombreArchivo[], char dni[]);
 stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]);
 stPaciente busquedaPaciente(char nombreArchivo[]);
 stPaciente validaciones(char nombreArchivo[],stPaciente paciente,int *flag);
+stPaciente modificaUnPaciente(stPaciente paciente);
 #endif // PACIENTES_H_INCLUDED

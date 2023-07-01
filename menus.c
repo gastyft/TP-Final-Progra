@@ -22,8 +22,8 @@ void menuPrincipal() ///FUNCION PARA MENU PRINCIPAL
 {
     char opcion=0;
     system("COLOR B");
-///  printf("Abriendo APP, espere");
-   /// carga_puntos();
+    printf("Abriendo APP, espere");
+    carga_puntos();
     do
     {
         muestraTituloMenu("\n\t\tMENU PRINCIPAL\n");
@@ -48,10 +48,10 @@ void menuPrincipal() ///FUNCION PARA MENU PRINCIPAL
             menuPracticas();
             break;
         case 27:
-     ///   printf("Cerrando APP. Gracias por confiar en nosotros");
-        ///   carga_puntos();
+           printf("Cerrando APP. Gracias por confiar en nosotros");
+           carga_puntos();
            system("cls");
-        firma();
+           firma();
             break;
         default:
             printf("\n\tHa seleccionado una opcion invalida.\n\tPor favor, presione cualquier tecla para continuar\n\n");

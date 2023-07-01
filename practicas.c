@@ -212,7 +212,7 @@ stPracticas busquedaPractica (char nombreArchivo[]) ///FUNCION BUSQUEDA PRACTICA
                 flag=0;
             }
         }
-        if(!flag)
+        if(flag)
         {
             printf("No existe la practica buscada\n");
         }
@@ -305,7 +305,7 @@ stPracticas validacionCosto( stPracticas valPracticas)
     }
     return valPracticas;
 }
-void darAltaInactivo(char nombreArchivo[])
+void darAltaInactivo(char nombreArchivo[]) /// Dar alta un inactivo
 {
     FILE*archivo= fopen(nombreArchivo,"r+b");
     int flag=1;
@@ -314,20 +314,23 @@ void darAltaInactivo(char nombreArchivo[])
     stPracticas practica;
     if(archivo)
     {
-        while(fread(&practica,sizeof(stPracticas),1,archivo)>0){
+        while(fread(&practica,sizeof(stPracticas),1,archivo)>0)
+        {
 
-       muestraPracticasInactivas(practica);
-       if(practica.baja==-1){
-        flag1=0;
-       }
+            muestraPracticasInactivas(practica);
+            if(practica.baja==-1)
+            {
+                flag1=0;
+            }
 
         }
-            if(!flag1){
+        if(!flag1)
+        {
             printf("\nIngrese nombre de practica a dar de alta\n");
             fflush(archivo);
             gets(nombre);
 
-            }
+        }
         do
         {
             rewind(archivo);
@@ -356,7 +359,8 @@ void darAltaInactivo(char nombreArchivo[])
                 fflush(stdin);
                 gets(nombre);
             }
-            else{
+            else
+            {
                 printf("No hay practicas inactivas \n");
                 flag=0;
             }
@@ -373,7 +377,7 @@ void darAltaInactivo(char nombreArchivo[])
     fclose(archivo);
 }
 
-void menuAltasPracticas(char nombreArchivo[])
+void menuAltasPracticas(char nombreArchivo[])  /// menu de altas practicas (contenedora de altas)
 {
 
     char o=0;
@@ -381,7 +385,6 @@ void menuAltasPracticas(char nombreArchivo[])
 
     do
     {
-
         printf("1)Dar alta una nueva practica\n 2)Dar alta una practica inactiva\n");
         fflush(stdin);
         o=getch();
@@ -398,12 +401,11 @@ void menuAltasPracticas(char nombreArchivo[])
 
         case '2':
             darAltaInactivo(nombreArchivo);
-             printf("\n");
+            printf("\n");
             system("pause");
             system("cls");
             break;
         case 27:
-
             break;
         default:
 
@@ -414,49 +416,44 @@ void menuAltasPracticas(char nombreArchivo[])
 
     }
     while(o!=ESC);
-
-
-
-
 }
 
 
 
-void modificacionPractica(char nombreArchivo[] )
+void modificacionPractica(char nombreArchivo[] ) /// modificacion de practica (funcion contenedora)
 {
     FILE *archivo=fopen(nombreArchivo,"r+b");
-    if(archivo){
-stPracticas practicaV;
-stPracticas practica;
+    if(archivo)
+    {
+        stPracticas practicaV;
+        stPracticas practica;
 
-practica=busquedaPractica(nombreArchivo);
-printf("ID %d",practica.idPractica);
-practicaV=modificaUnaPractica(practica);
+        practica=busquedaPractica(nombreArchivo);
+        printf("ID %d",practica.idPractica);
+        practicaV=modificaUnaPractica(practica);
 
-rewind(archivo);
-fseek(archivo,(practicaV.idPractica-1)*sizeof(stPracticas),SEEK_SET);
-fwrite(&practicaV,sizeof(stPracticas),1,archivo);
+        rewind(archivo);
+        fseek(archivo,(practicaV.idPractica-1)*sizeof(stPracticas),SEEK_SET);
+        fwrite(&practicaV,sizeof(stPracticas),1,archivo);
     }
-    else{
+    else
+    {
         printf("ERROR AL ABRIR EL ARCHIVO \n");
     }
-
-fclose(archivo);
-
+    fclose(archivo);
 }
 
-
-stPracticas modificaUnaPractica(stPracticas practicas)
+stPracticas modificaUnaPractica(stPracticas practicas) /// modifica una practica con sus validaciones
 {
 
     printf("\nIngreso de practicas:\n");
     printf("\n Nombre: ");
     fflush(stdin);
     gets(practicas.nombre);
-     practicas= validacionesPractica("practicas.dat",practicas);
+    practicas= validacionesPractica("practicas.dat",practicas);
     printf("\n Costo: ");
     scanf("%d",&practicas.costo);
- practicas=validacionCosto(practicas);
+    practicas=validacionCosto(practicas);
 
     return practicas;
 }

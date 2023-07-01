@@ -27,9 +27,7 @@ typedef struct
 void muestraUnPaciente(stPaciente paciente);
 void cargaArchivoPacientes(char nombreArchivo[]);
 void muestraArchivoPacientes(char nombreArchivo[]);
-stPaciente opcionBuscaPacienteDNI (char nombreArchivo[]);
 void darBajaPacientes(char nombreArchivo[]);
-stPaciente opcion_busca_paciente_apellido (char nombreArchivo[]);
 void practicaPaciente(stPaciente paciente);
 void menuAltasPacientes(char nombreArchivo[]);
 void menuAltasPacientes(char nombreArchivo[]);
@@ -37,6 +35,8 @@ void muestraPacientesInactivos(stPaciente paciente);
 void modificacion(char nombreArchivo[],stPaciente paciente);
 void menuModificacion(char nombreArchivo[]);
 int costoTotal(stPaciente paciente);
+stPaciente opcion_busca_paciente_apellido (char nombreArchivo[]);
+stPaciente opcionBuscaPacienteDNI (char nombreArchivo[]);
 stPaciente cargaUnPaciente();
 stPaciente buscarPacientePorDNI (char nombreArchivo[], char dni[]);
 stPaciente buscarPacientePorApellido (char nombreArchivo[], char apellido[]);

@@ -3,7 +3,7 @@
 #include"Firma.h"
 
 void firma(){
-    system("COLOR B");
+
 
     char firmaT[100][100] = {
     {"#######  #  #######  #     #######  #######  #     #  \n"},
@@ -16,6 +16,7 @@ void firma(){
   };
   // Imprimir la firma digital en grande
   for (int i = 0; i < 7; i++) {
+            system("COLOR B");
     printf("%s", firmaT[i]);
   }
    printf("\n\n");
@@ -35,19 +36,5 @@ void firma(){
 
     printf("%s", firma[i]);
   }
-  printf("\n\n");
-    char firmaC[100][100] = {
-    {"#######    ###    #     #  #     #######  #######  #######  \n"},
-    {"#         #   #   ##   ##        #        #           #     \n"},
-    {"#        #     #  # # # #  #     #        #           #     \n"},
-    {"#        #######  #  #  #  #     #######  #######     #     \n"},
-    {"#        #     #  #     #  #           #  #           #     \n"},
-    {"#        #     #  #     #  #           #  #           #     \n"},
-    {"#######  #     #  #     #  #     #######  #######     #     \n"}
-  };
-  // Imprimir la firma digital en grande
-  for (int i = 0; i < 7; i++) {
 
-    printf("%s", firmaC[i]);
-  }
 }

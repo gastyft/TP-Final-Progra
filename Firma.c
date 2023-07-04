@@ -4,6 +4,7 @@
 
 void firma(){
 
+            system("COLOR B");
 
     char firmaT[100][100] = {
     {"#######  #  #######  #     #######  #######  #     #  \n"},
@@ -16,7 +17,6 @@ void firma(){
   };
   // Imprimir la firma digital en grande
   for (int i = 0; i < 7; i++) {
-            system("COLOR B");
     printf("%s", firmaT[i]);
   }
    printf("\n\n");

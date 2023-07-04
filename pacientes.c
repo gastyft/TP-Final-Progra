@@ -158,7 +158,7 @@ void darBajaPacientes(char nombreArchivo[]) ///DAR DE BAJA PACIENTES
         gets(dni);
 
 
-        while(flag && fread(&paciente,sizeof(stPaciente),1,archivo))
+        while(flag && fread(&paciente,sizeof(stPaciente),1,archivo)>0)
         {
             if(strcmpi(paciente.dni, dni)==0)
             {
@@ -169,9 +169,6 @@ void darBajaPacientes(char nombreArchivo[]) ///DAR DE BAJA PACIENTES
                 }
                 else
                 {
-
-
-
                     fseek(archivo,(-1)*sizeof(stPaciente),SEEK_CUR);
                     paciente.eliminado=-1;
                     fwrite(&paciente,sizeof(stPaciente),1,archivo);
@@ -182,11 +179,8 @@ void darBajaPacientes(char nombreArchivo[]) ///DAR DE BAJA PACIENTES
         }
         if(flag)
         {
-            printf("No se encontro practica con ese nombre. Intente nuevamente \n");
-
-
+            printf("No se encontro pacientes con ese DNI. Intente nuevamente. \n");
         }
-
     }
     else
     {
@@ -308,7 +302,7 @@ stPaciente opcion_busca_paciente_apellido (char nombreArchivo[]) ///BUSCA PACIEN
     return paciente;
 }
 
-stPaciente validaciones(char nombreArchivo[],stPaciente paciente,int *flag) /// VALIDACIONES DE PACIENTE POR DNI
+stPaciente validaciones(char nombreArchivo[],stPaciente paciente,int *flag) /// VALIDACIONES DE PACIENTE POR DNI (que no exista otro DNI repetido)
 {
 ///dni,nombre,apellido vienen como parametros de la funcion alta y modificacion
     stPaciente pacienteValido;
@@ -424,9 +418,9 @@ void darAltaInactivoPacientes(char nombreArchivo[]) /// Funcion dar alta pacient
     {
         while(fread(&paciente,sizeof(stPaciente),1,archivo)>0)
         {
-            muestraPacientesInactivos(paciente);
             if(paciente.eliminado==-1)
             {
+            muestraPacientesInactivos(paciente);
                 flag1=0;
             }
         }
@@ -497,7 +491,7 @@ void menuAltasPacientes(char nombreArchivo[]) ///Menu de alta de pacientes nuevo
     do
     {
 
-        printf("1)Dar alta un nuevo paciente\n 2)Dar alta un paciente inactivo\n");
+        printf("1)Dar alta un nuevo paciente\n2)Dar alta un paciente inactivo\n");
         fflush(stdin);
         o=getch();
         system("cls");
@@ -521,7 +515,7 @@ void menuAltasPacientes(char nombreArchivo[]) ///Menu de alta de pacientes nuevo
             break;
         default:
 
-            printf("Ingreso opcion incorrecta presione cualquier tecla para continuar o ESC para salir a menu de Practicas\n");
+            printf("Ingreso opcion incorrecta presione cualquier tecla para continuar o ESC para salir a menu de Pacientes\n");
             fflush(stdin);
             o=getch();
         }
@@ -588,16 +582,19 @@ void modificacion(char nombreArchivo[],stPaciente paciente ) /// FUNCION CONTENE
     stPaciente pacienteV;
 
     FILE *archivo =fopen(nombreArchivo,"r+b");
-    printf("ID: %d",paciente.idPaciente);
+
     pacienteV=modificaUnPaciente(paciente);
     system("pause");
+    system("cls");
     rewind(archivo);
     fseek(archivo,(pacienteV.idPaciente-1)*sizeof(stPaciente),SEEK_SET);
     fwrite(&pacienteV,sizeof(stPaciente),1,archivo);
 
     fclose(archivo);
     muestraUnPaciente(paciente);
-
+    printf("\n");
+    system("pause");
+    system("cls");
 }
 
 void menuModificacion(char nombreArchivo[])  ///Menu de modificacion para buscar por DNI o por Apellido
@@ -617,21 +614,20 @@ void menuModificacion(char nombreArchivo[])  ///Menu de modificacion para buscar
         paciente=opcionBuscaPacienteDNI(nombreArchivo);
         if(paciente.idPaciente ==-1)
         {
-            printf("No existe\n");
+            printf("El paciente dado de baja no se puede modificar\n");
         }
         else
         {
             modificacion(nombreArchivo,paciente);
         }
         printf("\n");
-
 
         break;
     case '2':
         paciente= opcion_busca_paciente_apellido(nombreArchivo);
         if(paciente.idPaciente ==-1)
         {
-            printf("No existe\n");
+            printf("El paciente dado de baja no se puede modificar\n");
         }
         else
         {
@@ -641,11 +637,7 @@ void menuModificacion(char nombreArchivo[])  ///Menu de modificacion para buscar
         printf("\n");
 
         break;
-
     }
-
-
-
 }
 
 stPaciente modificaUnPaciente(stPaciente paciente)    ///Modifica un paciente

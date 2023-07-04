@@ -60,7 +60,7 @@ void laboratoriosAleatorios(char nombreArchivo[]) /// LABORATORIOS ALEATORIOS
     int contadorTotalPacientes=0;
     FILE *archivoPrac =fopen("practicas.dat","r+b");
     int contadorTotalPrac=0;
-    time_t tiempo_actual;
+    time_t tiempo_actual;  ///Estructura para extraer fecha actual
     /**
      estructura  tm para saber de donde sale
     struct tm {
@@ -83,18 +83,18 @@ void laboratoriosAleatorios(char nombreArchivo[]) /// LABORATORIOS ALEATORIOS
     char anio[5];
     int diaActual,mesActual,anioActual,diasMaximos=0,i=0;
 
-    // Obtenemos el tiempo actual
+    /// Obtenemos el tiempo actual
     tiempo_actual = time(NULL);
 
-    // Convertimos el tiempo a una estructura de tm
+    /// Convertimos el tiempo a una estructura de tm
     info_tiempo = localtime(&tiempo_actual);
 
-    // Obtenemos el día del mes como cadena
+    /// Obtenemos el día del mes como cadena
     strftime(dia, sizeof(dia), "%d", info_tiempo);
     strftime(mes, sizeof(mes),"%m",info_tiempo);
     strftime(anio, sizeof(anio),"%Y",info_tiempo);
 
-    // Convertimos la cadena a entero
+    /// Convertimos la cadena a entero
     diaActual = atoi(dia);
     mesActual = atoi(mes);
     anioActual =atoi(anio);
@@ -438,7 +438,6 @@ stLaboratorios validacionFecha(stLaboratorios laboratorio) ///VALIDACION DE UNA 
 
     if(archiLab!= NULL)
     {
-        srand(time(NULL));
 
         do
         {
@@ -499,7 +498,7 @@ stLaboratorios validacionFecha(stLaboratorios laboratorio) ///VALIDACION DE UNA 
                 while(fecha.dia > diasMaximos);
             }
         }
-        else
+        else /// si no es anio actual
         {
             do
             {
@@ -607,9 +606,9 @@ void darAltaInactivoLaboratorio(char nombreArchivo[])  /// dar alta un inactivo
     {
         while(fread(&laboratorios,sizeof(stLaboratorios),1,archivo)>0)
         {
-            muestraLaboratoriosInactivos(laboratorios);
             if(laboratorios.baja ==-1)
             {
+            muestraLaboratoriosInactivos(laboratorios);
                 flag1=0;
             }
         }
@@ -625,7 +624,7 @@ void darAltaInactivoLaboratorio(char nombreArchivo[])  /// dar alta un inactivo
             {
                 if(id == laboratorios.idLab )
                 {
-                    if(laboratorios.baja!= 0)
+                    if(laboratorios.baja == -1)
                     {
                         laboratorios.baja=0;
                         flag=0;

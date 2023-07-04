@@ -120,7 +120,6 @@ void muestraArchivoPracticas(char nombreArchivo[])
     if(archi)
     {
 
-
         while(o !=ESC)
         {
             printf("\n 1)Mostrar todas las practicas\n 2)Mostrar practicas activas\n 3)Mostrar practicas inactivas\n");
@@ -317,9 +316,9 @@ void darAltaInactivo(char nombreArchivo[]) /// Dar alta un inactivo
         while(fread(&practica,sizeof(stPracticas),1,archivo)>0)
         {
 
-            muestraPracticasInactivas(practica);
             if(practica.baja==-1)
             {
+            muestraPracticasInactivas(practica);
                 flag1=0;
             }
 
@@ -385,7 +384,7 @@ void menuAltasPracticas(char nombreArchivo[])  /// menu de altas practicas (cont
 
     do
     {
-        printf("1)Dar alta una nueva practica\n 2)Dar alta una practica inactiva\n");
+        printf("1)Dar alta una nueva practica\n2)Dar alta una practica inactiva\n");
         fflush(stdin);
         o=getch();
         system("cls");
@@ -429,9 +428,9 @@ void modificacionPractica(char nombreArchivo[] ) /// modificacion de practica (f
         stPracticas practica;
 
         practica=busquedaPractica(nombreArchivo);
-        printf("ID %d",practica.idPractica);
-        practicaV=modificaUnaPractica(practica);
 
+        practicaV=modificaUnaPractica(practica);
+        system("cls");
         rewind(archivo);
         fseek(archivo,(practicaV.idPractica-1)*sizeof(stPracticas),SEEK_SET);
         fwrite(&practicaV,sizeof(stPracticas),1,archivo);
@@ -450,7 +449,7 @@ stPracticas modificaUnaPractica(stPracticas practicas) /// modifica una practica
     printf("\n Nombre: ");
     fflush(stdin);
     gets(practicas.nombre);
-    practicas= validacionesPractica("practicas.dat",practicas);
+
     printf("\n Costo: ");
     scanf("%d",&practicas.costo);
     practicas=validacionCosto(practicas);
